@@ -2,6 +2,8 @@ package ci4821.subsystemsimulator;
 
 
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
+import ci4821.subsystemsimulator.hardware.OperatingSystem;
+import ci4821.subsystemsimulator.hardware.Processor;
 
 import static ci4821.subsystemsimulator.hardware.PhysicalMemoryUnit.WORD_SIZE;
 
@@ -10,12 +12,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // MEMORY MANAGER UNIT
-        MemoryManagerUnit mmu = new MemoryManagerUnit();
+        OperatingSystem operatingSystem = new OperatingSystem();
+        Processor processor     = new Processor();
+
+        operatingSystem.setReferenceProcessor(processor);
 
 		// NUMBER OF VIRTUAL PAGES
 		int N_PAGES = 16;
-
 
         int NVADDRESSES = (int) Math.pow(2, WORD_SIZE);
 
@@ -25,12 +28,11 @@ public class Main {
 		System.out.println("Number of pages: " + N_PAGES);
 
         // SO -> INICIAR PROCESO P
-        // MMU-> CREAR PT PARA PROCESO P
-        // SO -> CREAR DISK ADDRESSES TABLE PARA EL PROCESO P
-        // SET 'P1' 8192
-        int param = 8192;
-        mmu.set(100,'H');
-        System.out.println(mmu.get(100)); // prints Hello World
+        operatingSystem.startProcess("p1",2);
+        // P  -> SET  8192 to 'H'
+        // Processor -> SET  8192 to 'H'
+        processor.set(8192,'H');
+        System.out.println(processor.get(8192)); // prints Hello World
 	}
 
 }
