@@ -1,11 +1,11 @@
-package ci4821.subsystemsimulator.classes;
+package ci4821.subsystemsimulator.hardware;
 
 public class PhysicalMemoryEntry {
 
     private int frameOwnerPID;
 
-    PhysicalMemoryEntry(){
-        frameOwnerPID   = -1;
+    PhysicalMemoryEntry() {
+        frameOwnerPID = -1;
     }
 
     public boolean isBeingUsed() {

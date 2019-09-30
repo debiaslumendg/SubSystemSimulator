@@ -1,11 +1,13 @@
-package ci4821.subsystemsimulator.classes;
+package ci4821.subsystemsimulator.software;
+
+import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 
 public class OperatingSystem {
 
-    private PhysicalMemoryUnit physicalMemoryUnit;
+    private MemoryManagerUnit memoryManagerUnit;
 
     public OperatingSystem(){
-        this.physicalMemoryUnit = new PhysicalMemoryUnit();
+        this.memoryManagerUnit = new MemoryManagerUnit();
     }
 
     /**
@@ -16,7 +18,7 @@ public class OperatingSystem {
      * @param pathRefs      ruta al archivo que contiene el string de referencias
      */
     public void startProcess(String nameProcess, int nTEXTPages,int nDATAPages,String pathRefs){
-        Process process = new Process(physicalMemoryUnit,nameProcess,pathRefs);
+        Process process = new Process(memoryManagerUnit,nameProcess,pathRefs);
         // TODO: Falta utilizar nTEXTPages y nDATAPages para establecer las entradas en la tabla de páginas del proceso
         // TODO: Ejemplo nTEXTPages = 1 process.pageTable[0].setVirtualPageID(0)
         process.start();

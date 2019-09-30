@@ -7,15 +7,12 @@
  * 	    Manuel  González    11-10390
  * 	    Pedro   Perez       10-10574
  */
-package ci4821.subsystemsimulator.classes;
+package ci4821.subsystemsimulator.hardware.pagetable;
 
 
 class PageTableEntry {
 
     private int virtualPageID, frameID;
-
-    // TODO: usar... dice si esta página es una de datos o de texto
-    private boolean isDATAPage;
 
     PageTableEntry(){
         virtualPageID = -1;

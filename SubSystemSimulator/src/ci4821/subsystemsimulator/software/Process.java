@@ -7,14 +7,17 @@
  * 	    Manuel  González    11-10390
  * 	    Pedro   Perez       10-10574
  */
-package ci4821.subsystemsimulator.classes;
+package ci4821.subsystemsimulator.software;
+
+import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
+import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 
 import java.util.ArrayList;
 
 public class Process extends Thread{
 
-    private PhysicalMemoryUnit  physicalMemoryUnit;
-    private PageTable           pageTable;
+    private MemoryManagerUnit memoryManagerUnit;
+    private PageTable pageTable;
 
     /**Cadena de enteros con los ID de las páginas virtuales a acceder*/
     private ArrayList<Integer>   referencias; // [12 3 1 4 6 2 34 ]
@@ -25,10 +28,13 @@ public class Process extends Thread{
      * @param name Nombre del proceso
      * @param rutaRefs Ruta al archivo que contiene las referencias a acceder en memoria
      */
-    public Process(PhysicalMemoryUnit physicalMemoryUnit,String name,String rutaRefs){
+    public Process(MemoryManagerUnit memoryManagerUnit, String name, String rutaRefs){
         this.name   = name;
-        this.physicalMemoryUnit = physicalMemoryUnit;
+        this.memoryManagerUnit = memoryManagerUnit;
         this.pageTable  = new PageTable();
+
+        //TODO: Leer rutaRefs
+        referencias = new ArrayList<>(30);
     }
 
 
@@ -43,7 +49,7 @@ public class Process extends Thread{
             frameID = pageTable.getFrameID(virtualPageID);
 
             // Acceso a la memoria
-            physicalMemoryUnit.accessAddress(frameID);
+            memoryManagerUnit.accessAddress(frameID);
 
             if(i-- == 1){
                 i = 5;

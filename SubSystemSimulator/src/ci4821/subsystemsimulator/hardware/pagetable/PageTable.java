@@ -7,7 +7,7 @@
  * 	    Manuel  González    11-10390
  * 	    Pedro   Perez       10-10574
  */
-package ci4821.subsystemsimulator.classes;
+package ci4821.subsystemsimulator.hardware.pagetable;
 
 
 public class PageTable {
@@ -20,6 +20,7 @@ public class PageTable {
 
 		// Iniciados todas las entradas de la tabla
 		for(int i = 0; i < N_VIRTUAL_PAGES ; i++){
+			pageTableEntries[i] = new PageTableEntry();
 			pageTableEntries[i].setVirtualPageID(i);
 		}
 	}

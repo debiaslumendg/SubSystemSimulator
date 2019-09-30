@@ -1,6 +1,6 @@
 package ci4821.subsystemsimulator;
 
-import ci4821.subsystemsimulator.classes.OperatingSystem;
+import ci4821.subsystemsimulator.software.OperatingSystem;
 
 
 public class Main {
