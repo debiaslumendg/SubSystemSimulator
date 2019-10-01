@@ -1,10 +1,14 @@
+/**
+ * 
+ */
+
 package ci4821.subsystemsimulator.hardware;
 
-public class PhysicalMemoryEntry {
+public class MemoryEntry {
 
     private int frameOwnerPID;
 
-    PhysicalMemoryEntry() {
+    MemoryEntry() {
         frameOwnerPID = -1;
     }
 

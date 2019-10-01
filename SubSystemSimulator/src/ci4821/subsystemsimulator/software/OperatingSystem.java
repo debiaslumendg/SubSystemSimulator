@@ -1,3 +1,6 @@
+/**
+ * Representa el simulador
+ */
 package ci4821.subsystemsimulator.software;
 
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
@@ -12,15 +15,25 @@ public class OperatingSystem {
 
     /**
      * Comienza un proceso en el simulador.
-     * @param nameProcess   Nombre del proceso
-     * @param nTEXTPages    Número de páginas de texto
-     * @param nDATAPages    Número de páginas de datos
+     * @param name          Nombre del proceso
+     * @param nTextPages    Número de páginas de texto
+     * @param nDataPages    Número de páginas de datos
      * @param pathRefs      ruta al archivo que contiene el string de referencias
      */
-    public void startProcess(String nameProcess, int nTEXTPages,int nDATAPages,String pathRefs){
-        Process process = new Process(memoryManagerUnit,nameProcess,pathRefs);
+    public void startProcess(String name, int nTextPages,int nDataPages,String pathRefs){
+        
+        Process process = new Process(memoryManagerUnit,name,pathRefs,nTextPages,nDataPages);
         // TODO: Falta utilizar nTEXTPages y nDATAPages para establecer las entradas en la tabla de páginas del proceso
         // TODO: Ejemplo nTEXTPages = 1 process.pageTable[0].setVirtualPageID(0)
         process.start();
     }
+
+    public void killProcess() {}
+
+    /**
+     * Algoritmo de reemplazo de 'Reloj mejorado'
+     * @param bitRef        Indica si la página está en memoria o no.
+     * @param bitModified   Indica si la página de datos ha sido modificada o no.
+     */
+    public void superClock(int bitRef, int bitModified) {}
 }

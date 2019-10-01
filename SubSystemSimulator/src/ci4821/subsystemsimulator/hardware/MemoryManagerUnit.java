@@ -1,18 +1,18 @@
+/**
+ * 
+ */
 package ci4821.subsystemsimulator.hardware;
 
 public class MemoryManagerUnit {
-    // PHYSICAL MEMORY SIZE IN KB
-    public static final int SIZE_KB = 32;
+    
+    public static final int SIZE = 32;
     // NUMBER OF BITS PER WORD
     //public static final int WORD_SIZE = 16;
-    // PAGE SIZE
-    public static final int PAGE_SIZE_KB = 4;
-
-    // REPRESENTS THE PHYSICAL MEMORY
-    private PhysicalMemoryEntry[] physicalMemoryEntries;
+    public static final int PAGE_SIZE = 4;
+    private MemoryEntry[] memoryEntries;
 
     public MemoryManagerUnit() {
-        physicalMemoryEntries = new PhysicalMemoryEntry[SIZE_KB / PAGE_SIZE_KB];
+        memoryEntries = new MemoryEntry[SIZE / PAGE_SIZE];
     }
 
     /**

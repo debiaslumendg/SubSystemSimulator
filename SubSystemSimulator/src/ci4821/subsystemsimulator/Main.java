@@ -12,10 +12,10 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        /**Referencia al sistema operativo que se encargara a alto nivel ejecutar emulador*/
+        /** Simulador*/
         OperatingSystem operatingSystem = new OperatingSystem();
 
-        // Inicia un proceso diciendole las páginas
+        // Inicializacion de los procesos
         operatingSystem.startProcess("p1",15,8,"ruta_referencias.txt");
 	}
 
