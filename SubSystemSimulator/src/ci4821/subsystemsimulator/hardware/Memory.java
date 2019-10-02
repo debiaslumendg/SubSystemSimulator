@@ -5,18 +5,22 @@ import java.util.List;
 
 public class Memory {
 
-	List<Integer> memorySpace;
-	Integer currentAddress;
-	EStatus status;
+	private List<Integer> pageFrames;
 	
 	public Memory (Integer size) {
-		memorySpace = new ArrayList<>(size);
-		currentAddress = 0;
-		status = EStatus.READY;
+		pageFrames = new ArrayList<>(size);
 	}
 	
-	enum EStatus {
-		READY, READING, WRITING, MOVING
+	public synchronized void accessPageFrame(int address) {
+		System.out.print("Page Frame " + address + " has been accessed.");
+	}
+
+	public List<Integer> getPageFrames() {
+		return pageFrames;
+	}
+
+	public void setPageFrames(List<Integer> pageFrames) {
+		this.pageFrames = pageFrames;
 	}
 	
 }
