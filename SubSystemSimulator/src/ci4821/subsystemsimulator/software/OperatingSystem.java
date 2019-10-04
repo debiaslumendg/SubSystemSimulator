@@ -22,7 +22,7 @@ public class OperatingSystem {
      */
     public void startProcess(String name, int nTextPages,int nDataPages,String pathRefs){
         
-        Process process = new Process(memoryManagerUnit,name,pathRefs,nTextPages,nDataPages);
+        Thread process = new Thread(new SymProcess(memoryManagerUnit,name,pathRefs,nTextPages,nDataPages));
         // TODO: Falta utilizar nTEXTPages y nDATAPages para establecer las entradas en la tabla de páginas del proceso
         // TODO: Ejemplo nTEXTPages = 1 process.pageTable[0].setVirtualPageID(0)
         process.start();
@@ -36,4 +36,6 @@ public class OperatingSystem {
      * @param bitModified   Indica si la página de datos ha sido modificada o no.
      */
     public void superClock(int bitRef, int bitModified) {}
+    
+    public void handlePageFault(int pageID, SymProcess p) {}
 }

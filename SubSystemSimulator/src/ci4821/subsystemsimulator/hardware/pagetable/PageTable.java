@@ -25,6 +25,8 @@ public class PageTable {
 		}
 	}
 
+	// TODO: El page table no tiene que ejecutar estas acciones, esto le corresponde al SO
+	
 	/**
 	 * Dado el identificador de la página virtual accesada se regresa el frame en memoria asociado.
 	 * @param virtualPageID Entero que va del 0 al número de páginas virtuales totales menos 1
@@ -48,5 +50,9 @@ public class PageTable {
 	public void setFrameID(int virtualPageID,int frameID) {
 		// TODO: checks para virtualPageID pero solo excepciones al programador!
 		pageTableEntries[virtualPageID].setFrameID(frameID);
+	}
+	
+	public PageTableEntry getPage(int pageID) {
+		return pageTableEntries[pageID];
 	}
 }

@@ -11,43 +11,53 @@
 package ci4821.subsystemsimulator.hardware.pagetable;
 
 
-class PageTableEntry {
+public class PageTableEntry {
 
-    private int virtualPageID, frameID, bitPresent, bitModified, bitValid;
+	// TODO: Discutir estos campos
+	
+    private int virtualPageID;
+    private int frameID;
+    private boolean modified; 
+    private boolean valid;
 
     // Constructor
-    PageTableEntry(){
+    public PageTableEntry(){
         virtualPageID = -1;
         frameID = -1;
-        bitPresent = 0;
-        bitModified = 0;
-        bitValid = 1;
+        modified = false;
+        valid = false;
     }
 
-    // Determina si la página está siendo usada o no
-    public boolean isBeingUsed() {
-        return bitPresent != 0;
-    }
+	public int getVirtualPageID() {
+		return virtualPageID;
+	}
 
-    // Obtiene el numero de la pagina
-    public int getVirtualPageID() {
-        return virtualPageID;
-    }
+	public void setVirtualPageID(int virtualPageID) {
+		this.virtualPageID = virtualPageID;
+	}
 
-    // Asigna el numero a la pagina
-    public void setVirtualPageID(int virtualPageID) {
-        // TODO: checks
-        this.virtualPageID = virtualPageID;
-    }
+	public int getFrameID() {
+		return frameID;
+	}
 
-    // Obtiene el numero de frame de la memoria principal
-    public int getFrameID() {
-        return frameID;
-    }
+	public void setFrameID(int frameID) {
+		this.frameID = frameID;
+	}
 
-    // Asigna el frame donde se estara ejecutando la pagina
-    public void setFrameID(int frameID) {
-        // TODO: checks
-        this.frameID = frameID;
-    }
+	public boolean isModified() {
+		return modified;
+	}
+
+	public void setModified(boolean modified) {
+		this.modified = modified;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+    
 }
