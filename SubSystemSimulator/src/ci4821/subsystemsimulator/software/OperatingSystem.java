@@ -3,14 +3,19 @@
  */
 package ci4821.subsystemsimulator.software;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 
 public class OperatingSystem {
 
     private MemoryManagerUnit memoryManagerUnit;
+    private Map<Long, Thread> processes;
 
     public OperatingSystem(){
         this.memoryManagerUnit = new MemoryManagerUnit();
+        this.processes = new HashMap<>();
     }
 
     /**
@@ -23,6 +28,8 @@ public class OperatingSystem {
     public void startProcess(String name, int nTextPages,int nDataPages,String pathRefs){
         
         Thread process = new Thread(new SymProcess(memoryManagerUnit,name,pathRefs,nTextPages,nDataPages));
+        processes.put(process.getId(), process);
+        
         // TODO: Falta utilizar nTEXTPages y nDATAPages para establecer las entradas en la tabla de páginas del proceso
         // TODO: Ejemplo nTEXTPages = 1 process.pageTable[0].setVirtualPageID(0)
         process.start();
