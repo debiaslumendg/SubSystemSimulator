@@ -8,31 +8,48 @@ import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 import ci4821.subsystemsimulator.software.SymProcess;
 
 public class MemoryManagerUnit {
-    
+
+    // SIZE IN KB
     public static final int SIZE = 32;
-    // NUMBER OF BITS PER WORD
-    //public static final int WORD_SIZE = 16;
     public static final int PAGE_SIZE = 4;
+    public static final int N_FRAMES = SIZE / PAGE_SIZE;
     private MemoryEntry[] mainMemory;
 
     public MemoryManagerUnit() {
-    	mainMemory = new MemoryEntry[SIZE / PAGE_SIZE];
+
+    	mainMemory = new MemoryEntry[N_FRAMES];
+
+    	for(int i = 0; i < N_FRAMES;i++){
+    	    mainMemory[i] = new MemoryEntry();
+        }
     }
 
     /**
      * Utilizamos un método monitor para que solo 1 proceso acceda a la memoria.
-     * @param frameID ID del frame accedido
-     * @throws PageFaultException 
+     * @param pageID ID de la página accedida
+     * @throws PageFaultException
+     * @return
      */
-    synchronized public void readAddress(int pageID, SymProcess p) throws PageFaultException {
-    	if (translateAddress(pageID, p.getPageTable()) == -1) {
-    		throw new PageFaultException();
-    	}
+    synchronized public int readAddress(int pageID, SymProcess p) throws PageFaultException {
+        int realMemoryAddress = translateAddress(pageID, p.getPageTable());
+        if (realMemoryAddress != -1 &&
+                mainMemory[realMemoryAddress].getIdFrameOwnerPID() != Thread.currentThread().getId()) {
+
+            p.getPageTable().getPage(pageID).setReferenced(true);
+            return mainMemory[realMemoryAddress].getValue();
+
+        } else {
+            throw new PageFaultException();
+        }
     }
     
-    synchronized public void writeAddress(int pageID, SymProcess p) throws PageFaultException {
-    	if (translateAddress(pageID, p.getPageTable()) != -1) {
-    		p.getPageTable().getPage(pageID).setModified(true);
+    synchronized public void writeAddress(int pageID, int value, SymProcess p) throws PageFaultException {
+
+        int realMemoryAddress = translateAddress(pageID, p.getPageTable());
+    	if (realMemoryAddress != -1) {
+    	    p.getPageTable().getPage(pageID).setModified(true);
+            mainMemory[realMemoryAddress].setFrameOwnerPID(Thread.currentThread().getId());
+            mainMemory[realMemoryAddress].setValue(value);
     	} else {
     		throw new PageFaultException();
     	}

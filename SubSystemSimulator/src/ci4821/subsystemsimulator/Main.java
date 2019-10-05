@@ -16,7 +16,7 @@ public class Main {
         OperatingSystem operatingSystem = new OperatingSystem();
 
         // Inicializacion de los procesos
-        operatingSystem.startProcess("p1",15,8,"ruta_referencias.txt");
+        operatingSystem.startProcess("p1",3,2,"p1.txt");
 	}
 
 }
