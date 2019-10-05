@@ -32,6 +32,7 @@ public class SymProcess implements Runnable {
     private String name;
     private int nTextPages, nDataPages;
     private int current = 0;
+	private Long pid;
 
 	public static List<String> readFileInList(String fileName)
 	{
@@ -74,7 +75,7 @@ public class SymProcess implements Runnable {
 			linea = instruction.split(" ",3);
 			if (linea[0].equals("read")) {
 				stringRef.add(new Instruction(Operation.READ,Integer.parseInt(linea[1])));
-				System.out.println("Agregada instruccion READ con " +  linea[0] + " " + linea[1] );
+				//System.out.println("Agregada instruccion READ con " +  linea[0] + " " + linea[1] );
 			}else if(linea[0].equals("write")){
 				stringRef.add(
 						new Instruction(
@@ -82,7 +83,7 @@ public class SymProcess implements Runnable {
 								Integer.parseInt(linea[1]),
 								Integer.parseInt(linea[2])
 						));
-				System.out.println("Agregada instruccion WRITE con " +  linea[0] + " " + linea[1] + " " + linea[2]);
+				//System.out.println("Agregada instruccion WRITE con " +  linea[0] + " " + linea[1] + " " + linea[2]);
 			}
 		}
     }
@@ -94,7 +95,8 @@ public class SymProcess implements Runnable {
 		/*
 		 * int i = 5; int frameID = -1;
 		 */
-    	
+
+		int valueRead;
         for (Instruction i : stringRef) {
 
         	boolean success = false;
@@ -102,20 +104,22 @@ public class SymProcess implements Runnable {
 	        	try {
 		        	switch(i.getOp()) {
 		        		case WRITE:
-							System.out.format("[Proceso %s] Ejecutando instrucción WRITE en dirección %d, valor: %d\n",
-									Thread.currentThread().getName(),i.getPage(),i.getValue());
+							System.out.format("[Proceso %d] Ejecutando instrucción WRITE en dirección %d, valor: %d\n",
+									this.getPID(),i.getPage(),i.getValue());
 		        			mmu.writeAddress(i.getPage(), i.getValue(),this);
 		        			break;
 		        		case READ:
-							System.out.format("[Proceso %s] Ejecutando instrucción READ dirección %d\n",
-									Thread.currentThread().getName(),i.getPage());
-		        			mmu.readAddress(i.getPage(), this);
-		        			break;
+							System.out.format("[Proceso %d] Ejecutando instrucción READ dirección %d\n",
+									this.getPID(),i.getPage());
+							valueRead = mmu.readAddress(i.getPage(), this);
+							break;
 		        	}
 		        	success = true;
 	        	} catch (PageFaultException e) {
+					System.out.println("PAGE FAULT : Proceso: " + this.getPID() + " intentó acceder a página virtual : " +
+							i.getPage() + " que tiene por valor frame : " + pageTable.getFrameID(i.getPage()));
 	        		os.handlePageFault(i.getPage(), this);
-	        	}
+				}
         	} while (!success);
 
 			/*
@@ -155,6 +159,14 @@ public class SymProcess implements Runnable {
 
 	public int getnDataPages() {
 		return nDataPages;
+	}
+
+	public void setPID(Long newPid) {
+		this.pid = newPid;
+	}
+
+	public Long getPID() {
+		return pid;
 	}
 }
 

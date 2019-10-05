@@ -5,6 +5,7 @@ package ci4821.subsystemsimulator.hardware;
 
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
+import ci4821.subsystemsimulator.software.SwapTableEntry;
 import ci4821.subsystemsimulator.software.SymProcess;
 
 public class MemoryManagerUnit {
@@ -31,10 +32,14 @@ public class MemoryManagerUnit {
      * @return
      */
     synchronized public int readAddress(int pageID, SymProcess p) throws PageFaultException {
+        //TODO: Chequear si no hay page faulteros para darles prioridad
         int realMemoryAddress = translateAddress(pageID, p.getPageTable());
-        if (realMemoryAddress != -1 &&
-                mainMemory[realMemoryAddress].getIdFrameOwnerPID() != Thread.currentThread().getId()) {
 
+        if (realMemoryAddress != -1 &&
+                mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
+
+            System.out.println("Proceso: " + p.getPID() + " leyó memoria dir : " +
+                    realMemoryAddress + " valor: " + mainMemory[realMemoryAddress].getValue());
             p.getPageTable().getPage(pageID).setReferenced(true);
             return mainMemory[realMemoryAddress].getValue();
 
@@ -44,12 +49,14 @@ public class MemoryManagerUnit {
     }
     
     synchronized public void writeAddress(int pageID, int value, SymProcess p) throws PageFaultException {
-
+        //TODO: Chequear si no hay page faulteros para darles prioridad
         int realMemoryAddress = translateAddress(pageID, p.getPageTable());
-    	if (realMemoryAddress != -1) {
+    	if (realMemoryAddress != -1&&
+                mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
     	    p.getPageTable().getPage(pageID).setModified(true);
-            mainMemory[realMemoryAddress].setFrameOwnerPID(Thread.currentThread().getId());
             mainMemory[realMemoryAddress].setValue(value);
+            System.out.println("Proceso: " + p.getPID() + " escribió en memoria dir : " +
+                    realMemoryAddress + " valor: " + mainMemory[realMemoryAddress].getValue());
     	} else {
     		throw new PageFaultException();
     	}
@@ -66,12 +73,29 @@ public class MemoryManagerUnit {
      * Pero si consideramos que se tienen que sincronizar los procesos para que
      * dos procesos no accedan a este método y que si un método está aquí no tiene que estar en
      * accessAddress ... TODO: falta pensarlo más aquí
-     * @param processID
-     * @param frameID
+     * @param p
+     * @param virtualPageID
      */
 
-    synchronized public void pageFaultHandler(int processID, int frameID) {
+    synchronized public void pageFaultHandler(SymProcess p, SwapTableEntry entry, int virtualPageID) {
         // TODO: falta
+        // TODO: Asignarle memoria si hay
+        // TODO: Ejecutar algoritmo de reemplazo de ser necesario
+        System.out.println("Pafe Fault Handler para Proceso: " + p.getPID() + " virtualPageID : " + virtualPageID);
+
+        for(int i = 0; i < N_FRAMES;i++){
+            if (!mainMemory[i].isBeingUsed()){
+
+                System.out.println("Frame " + i + " está libre, asignado al proceso: " + p.getPID() );
+                mainMemory[i].setFrameOwnerPID(p.getPID());
+
+                // SWAP valor en disco a memoria
+                mainMemory[i].setValue(entry.getValueInDisk());
+
+                p.getPageTable().setFrameID(virtualPageID,i);
+                return;
+            }
+        }
     }
 
 }

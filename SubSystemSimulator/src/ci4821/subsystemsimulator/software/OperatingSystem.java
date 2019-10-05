@@ -12,7 +12,7 @@ import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 public class OperatingSystem {
 
     private MemoryManagerUnit memoryManagerUnit;
-    private Map<Long, SymProcess> processes;
+    private Map<Long, Thread> processes;
 
     /**Tabla del disco para los procesos
      * Se guarda para cada proceso.
@@ -23,7 +23,7 @@ public class OperatingSystem {
 
     public OperatingSystem(){
         this.memoryManagerUnit = new MemoryManagerUnit();
-        this.processes = new HashMap<Long, SymProcess>();
+        this.processes = new HashMap<Long, Thread>();
         this.swapTable = new HashMap<>();
     }
 
@@ -45,7 +45,11 @@ public class OperatingSystem {
 
         Thread process = new Thread(procesoRunnable,name);
 
-        Long newPid = process.getId();
+        Long newPid = process.getId(); //TODO: Es esto realmente único? Si yo reinicio este hilo esto cambia?
+
+        System.out.println("Creado proceso " + newPid + "(Texto:" + nTextPages+ ",Data:" + nDataPages+ ")");
+
+        procesoRunnable.setPID(newPid);
 
         SwapTable newSwapTable = new SwapTable();
 
@@ -61,7 +65,7 @@ public class OperatingSystem {
 
         swapTable.put(newPid,newSwapTable);
 
-        processes.put(newPid, procesoRunnable);
+        processes.put(newPid, process);
 
         process.start();
     }
@@ -75,5 +79,16 @@ public class OperatingSystem {
      */
     public void superClock(int bitRef, int bitModified) {}
     
-    public void handlePageFault(int pageID, SymProcess p) {}
+    public void handlePageFault(int pageID, SymProcess p) {
+
+        SwapTable swapTable = this.swapTable.get(p.getPID());
+
+        SwapTableEntry tableEntry = swapTable.getEntry(pageID);
+
+        if(tableEntry.isValueInDisk()) {
+            memoryManagerUnit.pageFaultHandler(p, tableEntry,pageID);
+        }else{
+            System.out.println("Proceso " + p.getPID() + " intentó acceder a una página incorrecta.");
+        }
+    }
 }
