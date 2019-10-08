@@ -17,10 +17,11 @@ public class PageTableEntry {
 	
     private int virtualPageID;
     private int frameID;
-    private boolean modified; 
+    private boolean modified;
+	private boolean referenced;
     private boolean valid;
 
-    // Constructor
+	// Constructor
     public PageTableEntry(){
         virtualPageID = -1;
         frameID = -1;
@@ -59,5 +60,8 @@ public class PageTableEntry {
 	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
-    
+
+	public void setReferenced(boolean referenced) {
+		this.referenced  = referenced;
+	}
 }

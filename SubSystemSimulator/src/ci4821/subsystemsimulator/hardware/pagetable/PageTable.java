@@ -11,7 +11,7 @@ package ci4821.subsystemsimulator.hardware.pagetable;
 
 public class PageTable {
 
-	private static final int VIRTUAL_PAGES = 16;
+	public static final int VIRTUAL_PAGES = 16;
 	private PageTableEntry[] pageTableEntries;
 
 	public PageTable() {

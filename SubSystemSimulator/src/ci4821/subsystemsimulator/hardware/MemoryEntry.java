@@ -6,7 +6,9 @@ package ci4821.subsystemsimulator.hardware;
 
 public class MemoryEntry {
 
-    private int frameOwnerPID;
+    private long frameOwnerPID;
+    private int value;
+
 
     MemoryEntry() {
         frameOwnerPID = -1;
@@ -16,13 +18,20 @@ public class MemoryEntry {
         return frameOwnerPID != -1;
     }
 
-    public void setFrameOwnerPID(int frameOwnerPID) {
-        // TODO: checks
+    public void setFrameOwnerPID(long frameOwnerPID) {
         this.frameOwnerPID = frameOwnerPID;
     }
 
-    public int getIdFrameOwnerPID() {
+
+    public long getIdFrameOwnerPID() {
         return this.frameOwnerPID;
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
 }
