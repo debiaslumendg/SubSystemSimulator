@@ -10,8 +10,6 @@ import ci4821.subsystemsimulator.software.SymProcess;
 public class MemoryManagerUnit {
     
     public static final int SIZE = 32;
-    // NUMBER OF BITS PER WORD
-    //public static final int WORD_SIZE = 16;
     public static final int PAGE_SIZE = 4;
     private MemoryEntry[] mainMemory;
 

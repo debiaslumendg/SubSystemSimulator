@@ -13,7 +13,6 @@ public class PageFaultException extends Exception {
 	private int pageID;
 	
 	
-	
 	public PageFaultException() {
 		super();
 	}
@@ -35,6 +34,4 @@ public class PageFaultException extends Exception {
 	public int getPageID() {
 		return pageID;
 	}
-	
-	
 }

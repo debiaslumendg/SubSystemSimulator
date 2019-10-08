@@ -33,11 +33,11 @@ public class SymProcess implements Runnable {
     public SymProcess(MemoryManagerUnit memoryManagerUnit, String name,
     String rutaRefs, int nTextPages, int nDataPages){
 
-        this.name               = name;
-        this.nTextPages         = nTextPages;
-        this.nDataPages         = nDataPages;
-        this.mmu  = memoryManagerUnit;
-        this.pageTable          = new PageTable();
+        this.name       = name;
+        this.nTextPages = nTextPages;
+        this.nDataPages = nDataPages;
+        this.mmu  		= memoryManagerUnit;
+        this.pageTable  = new PageTable();
 
         //TODO: Leer rutaRefs
         stringRef = new ArrayList<>(30);
@@ -69,8 +69,9 @@ public class SymProcess implements Runnable {
 	        		os.handlePageFault(i.getPage(), this);
 	        	}
         	} while (!success);
-			/*
-			 *  if(i-- == 1)  i = 5  // TODO: Dormir tiempo aleatorio para hacerlo mÃ¡s real
+
+			/*
+			 *  if(i-- == 1)  i = 5  // TODO: Dormir tiempo aleatorio para hacerlo mas real
 			 *  //Thread.sleep()  
 			 */
         }
@@ -109,6 +110,9 @@ public class SymProcess implements Runnable {
 	}
 }
 
+/**
+ * 
+ */
 class Instruction {
 	
 	private Operation op;

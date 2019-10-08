@@ -30,7 +30,7 @@ Parámetros de entrada:
 Diseño de la interfaz
 ---
 
-### **Simulador. Clase ‘OperatingSystem’**
+### **Simulador. Clase *OperatingSystem***
 
 Funciones:
 + Iniciar/terminar procesos.
@@ -44,7 +44,7 @@ páginas de los procesos que están en ejecución.
 MemoryManagerUnit: Monitor
 + **SIZE**. Tamaño de la memoria a simular en KB.
 + **PAGE_SIZE**. Tamaño de página en KB.
-+ **memoryEntries**. Representación de los frames de la memoria principal.
++ **mainMemory**. Representación de los frames de la memoria principal.
 + Llama al algoritmo de reemplazo.
 + Actualiza la tabla de página y los frames de la memoria principal.
 
@@ -69,7 +69,7 @@ PageTableEntry:
 
 ---
 
-### **Arquitectura de los procesos. Clase *Process***
+### **Arquitectura de los procesos. Clase *SymProcess***
 
 Los procesos se crearán con cantidad arbitraria pero fija de páginas de texto y de datos,
 compartirán la memoria principal por lo que surgirá un problema de exclusión
@@ -80,13 +80,14 @@ Parámetros:
 + **name**. ID.
 + **stringRef**. String de referencia. Se lee desde un archivo “.txt”
 + **pageTable**. Tabla de páginas.
-+ **memoryManagerUnit**. Representa el MMU, el mismo proceso maneja su memoria.
++ **mmu**. Representa el MMU, el mismo proceso maneja su memoria.
 + **nTextPages**. Cantidad de páginas de texto.
 + **nDataPages**. Cantidad de páginas de datos.
++ **os**.
 
 ---
 
-### **Algoritmo de reemplazo. Reloj mejorado. Función *superClock***
+### **Algoritmo de reemplazo. Reloj mejorado. Clase *ClockAlgorithm***
 
 Reemplaza la página con el bit de referencia en cero y primero las no modificadas
 antes que las modificadas. Para simular los page faults que puedan ocurrir con
@@ -99,7 +100,3 @@ Parámetros:
 
 ---
 
-DUDAS
-
-Es necesaria el tamaño de la palabra?
-nTextPages y nDataPages son realmente necesarias?
