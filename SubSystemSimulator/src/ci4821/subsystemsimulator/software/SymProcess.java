@@ -12,6 +12,7 @@ package ci4821.subsystemsimulator.software;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
+import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class SymProcess implements Runnable {
 
+	private final ConsoleLogger logger;
 	private OperatingSystem os;
     private MemoryManagerUnit mmu;
     private PageTable pageTable;
@@ -62,6 +64,8 @@ public class SymProcess implements Runnable {
         this.nDataPages         = nDataPages;
         this.mmu  				= memoryManagerUnit;
         this.pageTable          = new PageTable();
+
+        logger = ConsoleLogger.getInstance();
 
 		stringRef = new ArrayList<>(30);
 
@@ -104,20 +108,14 @@ public class SymProcess implements Runnable {
 	        	try {
 		        	switch(i.getOp()) {
 		        		case WRITE:
-							System.out.format("[Proceso %d] Ejecutando instrucción WRITE en dirección %d, valor: %d\n",
-									this.getPID(),i.getPage(),i.getValue());
 		        			mmu.writeAddress(i.getPage(), i.getValue(),this);
 		        			break;
 		        		case READ:
-							System.out.format("[Proceso %d] Ejecutando instrucción READ dirección %d\n",
-									this.getPID(),i.getPage());
 							valueRead = mmu.readAddress(i.getPage(), this);
 							break;
 		        	}
 		        	success = true;
 	        	} catch (PageFaultException e) {
-					System.out.println("PAGE FAULT : Proceso: " + this.getPID() + " intentó acceder a página virtual : " +
-							i.getPage() + " que tiene por valor frame : " + pageTable.getFrameID(i.getPage()));
 	        		os.handlePageFault(i.getPage(), this);
 				}
         	} while (!success);

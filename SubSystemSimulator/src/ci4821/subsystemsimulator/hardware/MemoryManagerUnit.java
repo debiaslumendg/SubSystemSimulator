@@ -7,6 +7,7 @@ import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 import ci4821.subsystemsimulator.software.SwapTableEntry;
 import ci4821.subsystemsimulator.software.SymProcess;
+import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 public class MemoryManagerUnit {
 
@@ -15,10 +16,12 @@ public class MemoryManagerUnit {
     public static final int PAGE_SIZE = 4;
     public static final int N_FRAMES = SIZE / PAGE_SIZE;
     private MemoryEntry[] mainMemory;
+    private ConsoleLogger logger;
 
     public MemoryManagerUnit() {
 
     	mainMemory = new MemoryEntry[N_FRAMES];
+        logger = ConsoleLogger.getInstance();
 
     	for(int i = 0; i < N_FRAMES;i++){
     	    mainMemory[i] = new MemoryEntry();
@@ -35,11 +38,22 @@ public class MemoryManagerUnit {
         //TODO: Chequear si no hay page faulteros para darles prioridad
         int realMemoryAddress = translateAddress(pageID, p.getPageTable());
 
+
+        logger.logMessage(ConsoleLogger.Level.READ_PAGE,"Leyendo [ Página: " + pageID + "] -> [Frame : " + realMemoryAddress + "]");
+
+        if(realMemoryAddress != -1 &&
+                mainMemory[realMemoryAddress].getIdFrameOwnerPID() != Thread.currentThread().getId()){
+            logger.logMessage(ConsoleLogger.Level.READ_PAGE,
+                    "Error , no puedes leer ese frame. [Frame : " + realMemoryAddress + "] es de [ Proceso : " +
+                            mainMemory[realMemoryAddress].getIdFrameOwnerPID() +"]");
+        }
+
         if (realMemoryAddress != -1 &&
                 mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
 
-            System.out.println("Proceso: " + p.getPID() + " leyó memoria dir : " +
-                    realMemoryAddress + " valor: " + mainMemory[realMemoryAddress].getValue());
+            logger.logMessage(ConsoleLogger.Level.READ_PAGE,
+                    "[Frame : " + realMemoryAddress + "] -> Valor : " + mainMemory[realMemoryAddress].getValue());
+
             p.getPageTable().getPage(pageID).setReferenced(true);
             return mainMemory[realMemoryAddress].getValue();
 
@@ -51,12 +65,25 @@ public class MemoryManagerUnit {
     synchronized public void writeAddress(int pageID, int value, SymProcess p) throws PageFaultException {
         //TODO: Chequear si no hay page faulteros para darles prioridad
         int realMemoryAddress = translateAddress(pageID, p.getPageTable());
+
+        logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
+                "Escribiendo a [ Página: " + pageID + "] -> [Frame : " + realMemoryAddress + "] Valor: " +
+                        value);
+
+        if(realMemoryAddress != -1 &&
+                mainMemory[realMemoryAddress].getIdFrameOwnerPID() != Thread.currentThread().getId()){
+            logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
+                    "Error , no puedes escribir ahí. [Frame : " + realMemoryAddress + "] es de [ Proceso : " +
+                            mainMemory[realMemoryAddress].getIdFrameOwnerPID() +"]");
+        }
+
     	if (realMemoryAddress != -1&&
                 mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
     	    p.getPageTable().getPage(pageID).setModified(true);
             mainMemory[realMemoryAddress].setValue(value);
-            System.out.println("Proceso: " + p.getPID() + " escribió en memoria dir : " +
-                    realMemoryAddress + " valor: " + mainMemory[realMemoryAddress].getValue());
+            logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
+                    "Escribió en [ Frame: " + realMemoryAddress + "] Valor: " +
+                            mainMemory[realMemoryAddress].getValue());
     	} else {
     		throw new PageFaultException();
     	}
@@ -65,8 +92,6 @@ public class MemoryManagerUnit {
     private int translateAddress(int pageID, PageTable pt) {
     	return pt.getFrameID(pageID);
     }
-    
-    
     
     /**
      * Este pageFaultHandler no lo veo correcto estando miembro de PhysicalMemoryUnit?

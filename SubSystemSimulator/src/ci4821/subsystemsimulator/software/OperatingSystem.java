@@ -8,9 +8,11 @@ import java.util.Map;
 
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
+import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 public class OperatingSystem {
 
+    private final ConsoleLogger logger;
     private MemoryManagerUnit memoryManagerUnit;
     private Map<Long, Thread> processes;
 
@@ -25,6 +27,8 @@ public class OperatingSystem {
         this.memoryManagerUnit = new MemoryManagerUnit();
         this.processes = new HashMap<Long, Thread>();
         this.swapTable = new HashMap<>();
+        logger = ConsoleLogger.getInstance();
+        logger.logMessage(ConsoleLogger.Level.INFO,"Creadas estructuras para la emulación");
     }
 
     /**
@@ -47,7 +51,15 @@ public class OperatingSystem {
 
         Long newPid = process.getId(); //TODO: Es esto realmente único? Si yo reinicio este hilo esto cambia?
 
-        System.out.println("Creado proceso " + newPid + "(Texto:" + nTextPages+ ",Data:" + nDataPages+ ")");
+        logger.logMessage(
+                ConsoleLogger.Level.NUEVO_PROCESO,
+                String.format(
+                "Creado nuevo proceso \"%s\" PID:%s ( TEXTO: %d,DATOS:%d)",
+                name,
+                newPid,
+                nTextPages,
+                nDataPages
+        ));
 
         procesoRunnable.setPID(newPid);
 
@@ -80,6 +92,10 @@ public class OperatingSystem {
     public void superClock(int bitRef, int bitModified) {}
     
     public void handlePageFault(int pageID, SymProcess p) {
+
+        logger.logMessage( ConsoleLogger.Level.PAGE_FAULT,
+                "[ Proceso: " + p.getPID() + "] intentó acceder a [Página  : " +
+                pageID + "] -> [Frame : " + p.getPageTable().getFrameID(pageID) + "]");
 
         SwapTable swapTable = this.swapTable.get(p.getPID());
 
