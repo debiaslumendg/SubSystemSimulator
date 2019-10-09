@@ -1,3 +1,18 @@
+/**
+ *
+ * Representa la tabla de disco que se supone contendría entradas:
+ *
+ * [Pagina virtual ID]  -> [Direccion en disco]
+ *
+ * En nuestro caso solo guarda el contenido establecido por el proceso con un WRITE. Cuando un frame es reemplazado de
+ * memoria su contenido se guarda en la instancia de esta clase que le pertenezca al proceso al que le pertenecia
+ * el frame que le quitaron.
+ *
+ *  Autores:
+ *      Natscha Gamboa      12-11250
+ * 	    Manuel  GonzÃ¡lez   11-10390
+ * 	    Pedro   Perez       10-10574
+ */
 package ci4821.subsystemsimulator.software;
 
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;

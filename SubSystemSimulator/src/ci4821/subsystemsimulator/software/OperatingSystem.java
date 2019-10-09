@@ -18,7 +18,7 @@ public class OperatingSystem {
 
     /**Tabla del disco para los procesos
      * Se guarda para cada proceso.
-     * Nos dice cuales páginas están guardadas en disco.
+     * Nos dice cuales páginas están guardadas en disco. y su contenido
      * */
     private Map<Long, SwapTable> swapTable;
 

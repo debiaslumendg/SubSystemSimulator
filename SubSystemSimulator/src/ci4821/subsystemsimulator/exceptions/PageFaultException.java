@@ -1,3 +1,11 @@
+/**
+ *
+ * Representa la excepción Page Fault que indica si hubo un error cuando el proceso intentó acceder a una página virtual.
+ *  Autores:
+ *      Natscha Gamboa      12-11250
+ * 	    Manuel  Gonzalez   11-10390
+ * 	    Pedro   Perez       10-10574
+ */
 package ci4821.subsystemsimulator.exceptions;
 
 import ci4821.subsystemsimulator.software.SymProcess;
