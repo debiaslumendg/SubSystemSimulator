@@ -33,7 +33,6 @@ public class SymProcess implements Runnable {
     private ArrayList<Instruction> stringRef;
     private String name;
     private int nTextPages, nDataPages;
-    private int current = 0;
 	private Long pid;
 
 	public static List<String> readFileInList(String fileName)

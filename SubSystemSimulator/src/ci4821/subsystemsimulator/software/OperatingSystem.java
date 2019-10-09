@@ -20,13 +20,13 @@ public class OperatingSystem {
      * Se guarda para cada proceso.
      * Nos dice cuales páginas están guardadas en disco.
      * */
-    private Map<Long, SwapTable> swapTable;
+    private Map<Long, SwapTable> swapTables;
 
 
     public OperatingSystem(){
         this.memoryManagerUnit = new MemoryManagerUnit();
         this.processes = new HashMap<Long, Thread>();
-        this.swapTable = new HashMap<>();
+        this.swapTables = new HashMap<>();
         logger = ConsoleLogger.getInstance();
         logger.logMessage(ConsoleLogger.Level.INFO,"Creadas estructuras para la emulación");
     }
@@ -75,7 +75,7 @@ public class OperatingSystem {
             newSwapTable.set(i,0);
         }
 
-        swapTable.put(newPid,newSwapTable);
+        swapTables.put(newPid,newSwapTable);
 
         processes.put(newPid, process);
 
@@ -91,13 +91,14 @@ public class OperatingSystem {
      */
     public void superClock(int bitRef, int bitModified) {}
     
+    
     public void handlePageFault(int pageID, SymProcess p) {
 
         logger.logMessage( ConsoleLogger.Level.PAGE_FAULT,
                 "[ Proceso: " + p.getPID() + "] intentó acceder a [Página  : " +
                 pageID + "] -> [Frame : " + p.getPageTable().getFrameID(pageID) + "]");
 
-        SwapTable swapTable = this.swapTable.get(p.getPID());
+        SwapTable swapTable = this.swapTables.get(p.getPID());
 
         SwapTableEntry tableEntry = swapTable.getEntry(pageID);
 

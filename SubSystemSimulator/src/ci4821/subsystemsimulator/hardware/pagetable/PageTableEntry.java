@@ -25,7 +25,8 @@ public class PageTableEntry {
     public PageTableEntry(){
         virtualPageID = -1;
         frameID = -1;
-        modified = false;
+		modified = false;
+		referenced = false;
         valid = false;
     }
 

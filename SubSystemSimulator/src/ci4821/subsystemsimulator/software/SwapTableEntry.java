@@ -4,7 +4,6 @@ public class SwapTableEntry{
 
     private static final int NULL_VALUE = Integer.MAX_VALUE;
     private boolean isInDisk = false;
-
     private int valueInDisk  = NULL_VALUE;
 
     public void setValueInDisk(int newValue) {

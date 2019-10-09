@@ -121,6 +121,8 @@ public class MemoryManagerUnit {
                 return;
             }
         }
+
+        // No encontró ningún frame libre, entonces llama al algoritmo de reemplazo
     }
 
 }

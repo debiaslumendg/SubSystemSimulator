@@ -1,6 +1,7 @@
 package ci4821.subsystemsimulator.software;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ClockAlgorithm
@@ -8,5 +9,7 @@ import java.util.HashMap;
 public class ClockAlgorithm {
 
     private int pointer, pageFaults, page, refStrLegnth;
-    private HashMap<MemoryEntry, boolean> processes;
+    private Map<MemoryEntry, Boolean> frameRefs;
+
+    
 }
