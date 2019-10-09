@@ -44,6 +44,7 @@ páginas de los procesos que están en ejecución.
 MemoryManagerUnit: Monitor
 + **SIZE**. Tamaño de la memoria a simular en KB.
 + **PAGE_SIZE**. Tamaño de página en KB.
++ **TOTAL_FRAMES**. Cantidad total de los frames de la memoria principal.
 + **mainMemory**. Representación de los frames de la memoria principal.
 + Llama al algoritmo de reemplazo.
 + Actualiza la tabla de página y los frames de la memoria principal.
@@ -51,21 +52,21 @@ MemoryManagerUnit: Monitor
 
 MemoryEntry:
 + **frameOwnerPID**. ID/PID del proceso/hilo asignado al frame.
-+ **value**. Data contenida dentro del frame de la entrada de memoria.
++ **data**. Data contenida dentro del frame.
 
 ---
 
 ### **Arquitectura de la tabla de página. Clases *PageTable* y *PageTableEntry***
 
 PageTable: Tabla de página del proceso
-+ **VIRTUAL_PAGES**. Cantidad de páginas virtuales.
-+ **pageTableEntries**. Entradas de la tabla de página.
++ **PAGES**. Cantidad total de páginas virtuales disponibles en la tabla.
++ **pageTableEntries**. Representación de la tabla de página.
 
 PageTableEntry:
-+ **pageID**. Número de página.
-+ **frameID**. Número de frame asociado en la memoria principal.
-+ **referenced**. Bit de referncia que indica si el algoritmo de reemplazo la refenció.
-+ **modified**. Bit de modificada.
++ **processPageID**. Guarda uno de los números de página del string de referencia del proceso.
++ **frameID**. Dirección del frame asociado en la memoria principal.
++ **referenced**. Indica si el algoritmo de reemplazo la refenció.
++ **modified**. Indica si la página que tiene asociada fué modificada.
 + **valid**. Bit de validez. Es válida si se encuentra en el rango [VIRTUAL_PAGES - nDataPages,VIRTUAL_PAGES - 1]
 
 ---

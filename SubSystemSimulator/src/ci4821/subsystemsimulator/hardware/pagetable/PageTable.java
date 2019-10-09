@@ -1,58 +1,45 @@
 /**
- *
  * Contiene la clase para la Tabla de Página de un proceso.
  *
  * Autores:
- *      Natscha Gamboa      12-11250
+ *      Natascha Gamboa     12-11250
  * 	    Manuel  González    11-10390
- * 	    Pedro   Perez       10-10574
+ * 	    Pedro   Pérez       10-10574
  */
 package ci4821.subsystemsimulator.hardware.pagetable;
 
 public class PageTable {
 
-	public static final int VIRTUAL_PAGES = 16;
+	/**
+	 * Cantidad total de páginas virtuales disponibles en la tabla.
+	 */
+	public static final int PAGES = 16;
+	/**
+	 * Representacion de la tabla de página.
+	 */
 	private PageTableEntry[] pageTableEntries;
 
 	public PageTable() {
 
-		pageTableEntries = new PageTableEntry[VIRTUAL_PAGES];
+		pageTableEntries = new PageTableEntry[PAGES];
 
-		// Iniciados todas las entradas de la tabla
-		for(int i = 0; i < VIRTUAL_PAGES ; i++){
+		// Inicialización de la tabla de pagina
+		for(int i = 0; i < PAGES ; i++){
 			pageTableEntries[i] = new PageTableEntry();
-			pageTableEntries[i].setVirtualPageID(i);
 		}
 	}
 
-	// TODO: El page table no tiene que ejecutar estas acciones, esto le corresponde al SO
-	
-	/**
-	 * Dado el identificador de la página virtual accesada se regresa el frame en memoria asociado.
-	 * @param virtualPageID Entero que va del 0 al número de páginas virtuales totales menos 1
-	 * @return entero que representa el Frame asociado a la página virtual
-	 *
-	 * Genera excepciones! parte de la simulación así que se deben mostrar al usuario también!
-	 */
-	public int getFrameID(int virtualPageID) {
-		// TODO: CHEQUEAR 0 <= virtualPageID < 16  y lanzar excepcion "SEGMENTATION FAULT" ?
-		// TODO: CHEQUEAR SI pageTableEntries[virtualPageID] está siendo usado sino "SEG FAULT" ?
-		// TODO: CHEQUEAR SI tiene el frame establecido y lanzar SEG FAULT
-
-		return pageTableEntries[virtualPageID].getFrameID();
+	public PageTableEntry getPage(int pageIndex) {
+		return pageTableEntries[pageIndex];
 	}
 
 	/**
-	 * Asigna un frame a una página virtual
-	 * @param virtualPageID ID de la página virtual
-	 * @param frameID 		ID del frame libre a asignar
+	 * Asigna a la entrada de tabla de página una página del string de
+	 * referencia del proceso
+	 * @param processPageID Página del string de referencia del proceso
+	 * @param pageIndex		Entrada en la tabla de página
 	 */
-	public void setFrameID(int virtualPageID,int frameID) {
-		// TODO: checks para virtualPageID pero solo excepciones al programador!
-		pageTableEntries[virtualPageID].setFrameID(frameID);
-	}
-	
-	public PageTableEntry getPage(int pageID) {
-		return pageTableEntries[pageID];
+	public void setPage(int processPageID, int pageIndex) {
+		pageTableEntries[pageIndex].setProcessPageID(processPageID);
 	}
 }

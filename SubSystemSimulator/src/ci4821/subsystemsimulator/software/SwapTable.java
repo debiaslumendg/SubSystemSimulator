@@ -4,11 +4,11 @@ import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 
 public class SwapTable {
 
-    SwapTableEntry[] tableEntries = new SwapTableEntry[PageTable.VIRTUAL_PAGES];
+    SwapTableEntry[] tableEntries = new SwapTableEntry[PageTable.PAGES];
 
     SwapTable(){
 
-        for(int i = 0; i < PageTable.VIRTUAL_PAGES;i++){
+        for(int i = 0; i < PageTable.PAGES;i++){
             tableEntries[i] = new SwapTableEntry();
         }
     }

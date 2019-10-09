@@ -1,5 +1,5 @@
 /**
- * Clase que representa un frame en una entrada de la memoria principal.
+ * Clase que representa un frame de la memoria principal.
  */
 
 package ci4821.subsystemsimulator.hardware;
@@ -7,11 +7,11 @@ package ci4821.subsystemsimulator.hardware;
 public class MemoryEntry {
 
     /**
-     * ID/PID del proceso/hilo asignado al frame
+     * ID/PID del proceso/hilo asignado al frame.
      */
     private long frameOwnerPID;
     /**
-     * Data contenida dentro del frame de la entrada de memoria.
+     * Data contenida dentro del frame.
      */
     private int data;
 

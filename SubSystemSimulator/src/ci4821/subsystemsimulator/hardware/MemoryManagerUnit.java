@@ -1,29 +1,40 @@
 /**
- * 
+ * Clase que representa la memoria principal
  */
 package ci4821.subsystemsimulator.hardware;
 
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
-import ci4821.subsystemsimulator.software.SwapTableEntry;
 import ci4821.subsystemsimulator.software.SymProcess;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 public class MemoryManagerUnit {
 
-    // SIZE IN KB
+    /**
+     * Tamaño de la memoria a simular en KB.
+     */
     public static final int SIZE = 32;
+    /**
+     * Tamaño de página en KB.
+     */
     public static final int PAGE_SIZE = 4;
-    public static final int N_FRAMES = SIZE / PAGE_SIZE;
+    /**
+     * Cantidad total de los frames de la memoria principal.
+     */
+    public static final int TOTAL_FRAMES = SIZE / PAGE_SIZE;
+    /**
+     * Representacion de los frames de la memoria principal.
+     */
     private MemoryEntry[] mainMemory;
     private ConsoleLogger logger;
 
     public MemoryManagerUnit() {
 
-    	mainMemory = new MemoryEntry[N_FRAMES];
+    	mainMemory = new MemoryEntry[TOTAL_FRAMES];
         logger = ConsoleLogger.getInstance();
 
-    	for(int i = 0; i < N_FRAMES;i++){
+        // Inicialización de los frames de la memoria
+    	for(int i = 0; i < TOTAL_FRAMES;i++){
     	    mainMemory[i] = new MemoryEntry();
         }
     }
@@ -109,7 +120,7 @@ public class MemoryManagerUnit {
         // Ejecutar algoritmo de reemplazo de ser necesario
         System.out.println("Pafe Fault Handler para Proceso: " + p.getPID() + " virtualPageID : " + virtualPageID);
 
-        for(int i = 0; i < N_FRAMES;i++){
+        for(int i = 0; i < TOTAL_FRAMES;i++){
             if (!mainMemory[i].isBeingUsed()){
 
                 System.out.println("Frame " + i + " está libre, asignado al proceso: " + p.getPID() );

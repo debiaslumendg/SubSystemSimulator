@@ -84,12 +84,32 @@ public class OperatingSystem {
 
     public void killProcess() {}
 
-    /**
-     * Algoritmo de reemplazo de 'Reloj mejorado'
-     * @param bitRef        Indica si la página está en memoria o no.
-     * @param bitModified   Indica si la página de datos ha sido modificada o no.
-     */
-    public void superClock(int bitRef, int bitModified) {}
+	/**
+	 * Dado el identificador de la página virtual accesada se regresa el frame en memoria asociado.
+	 * @param virtualPageID Entero que va del 0 al número de páginas virtuales totales menos 1
+	 * @return entero que representa el Frame asociado a la página virtual
+	 *
+	 * Genera excepciones! parte de la simulación así que se deben mostrar al usuario también!
+	 */
+	public int getFrameID(int virtualPageID) {
+		// TODO: CHEQUEAR 0 <= virtualPageID < 16  y lanzar excepcion "SEGMENTATION FAULT" ?
+		// TODO: CHEQUEAR SI pageTableEntries[virtualPageID] está siendo usado sino "SEG FAULT" ?
+		// TODO: CHEQUEAR SI tiene el frame establecido y lanzar SEG FAULT
+
+		return pageTableEntries[virtualPageID].getFrameID();
+	}
+
+	/**
+	 * Asigna un frame a una página virtual
+	 * @param virtualPageID ID de la página virtual
+	 * @param frameID 		ID del frame libre a asignar
+	 */
+	public void setFrameID(int virtualPageID,int frameID) {
+		// TODO: checks para virtualPageID pero solo excepciones al programador!
+		pageTableEntries[virtualPageID].setFrameID(frameID);
+	}
+	
+
     
     
     public void handlePageFault(int pageID, SymProcess p) {

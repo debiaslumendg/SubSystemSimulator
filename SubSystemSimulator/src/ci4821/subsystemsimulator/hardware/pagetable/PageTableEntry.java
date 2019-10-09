@@ -1,11 +1,10 @@
 /**
- *
- * Contiene la clase para una entrada en la Página de Tabla de un proceso.
+ * Contiene la clase para una entrada en la Tabla de Página de un proceso.
  *
  *  Autores:
- *      Natscha Gamboa      12-11250
+ *      Natascha Gamboa     12-11250
  * 	    Manuel  González    11-10390
- * 	    Pedro   Perez       10-10574
+ * 	    Pedro   Pérez       10-10574
  */
 
 package ci4821.subsystemsimulator.hardware.pagetable;
@@ -13,24 +12,41 @@ package ci4821.subsystemsimulator.hardware.pagetable;
 
 public class PageTableEntry {
 
-    private int pageID, frameID;
-    private boolean modified, referenced, valid;
+	/**
+	 * Guarda uno de los números de página del string de referencia del proceso.
+	 */
+	private int processPageID;
+	/**
+	 * Dirección del frame asociado en la memoria principal.
+	 */
+	private int frameID;
+	/**
+	 * Indica si la página que tiene asociada fué modificada.
+	 */
+	private boolean modified;
+	/**
+	 * Indica si el algoritmo de reemplazo la refenció.
+	 */
+	private boolean referenced;
+	/**
+	 * 
+	 */
+	private boolean valid;
 
-	// Constructor
     public PageTableEntry(){
-        pageID = -1;
+        processPageID = -1;
         frameID = -1;
 		modified = false;
 		referenced = false;
         valid = false;
     }
 
-	public int getVirtualPageID() {
-		return pageID;
+	public int getProcessPageID() {
+		return processPageID;
 	}
 
-	public void setVirtualPageID(int virtualPageID) {
-		this.pageID = virtualPageID;
+	public void setProcessPageID(int processPageID) {
+		this.processPageID = processPageID;
 	}
 
 	public int getFrameID() {
@@ -55,6 +71,10 @@ public class PageTableEntry {
 
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+
+	public boolean isReferenced() {
+		return referenced;
 	}
 
 	public void setReferenced(boolean referenced) {
