@@ -4,7 +4,7 @@
  *
  *  Autores:
  *      Natscha Gamboa      12-11250
- * 	    Manuel  GonzÃ¡lez    11-10390
+ * 	    Manuel  Gonzalez    11-10390
  * 	    Pedro   Perez       10-10574
  */
 package ci4821.subsystemsimulator.software;
