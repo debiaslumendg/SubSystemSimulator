@@ -16,8 +16,10 @@ public class Main {
         /** Simulador*/
         OperatingSystem operatingSystem = new OperatingSystem();
 
-        // Inicializacion de los procesos
-        operatingSystem.startProcess("p1",3,2,"p1.txt");
+        // Inicializacion del proceso 1
+        operatingSystem.startProcess("proc1",13,2,"test/dosprocesospeleones/p1.txt");
+        // Inicializacion del proceso 2
+        operatingSystem.startProcess("proc2",10,2,"test/dosprocesospeleones/p2.txt");
 	}
 
 }

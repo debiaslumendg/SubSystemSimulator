@@ -50,9 +50,9 @@ public class ConsoleLogger {
         }
 
         System.out.format(
-                ">\t%s\t|\t%s\t|\t%s\t|\t%s\t|\tDice \"%s\"\n",
+                ">\t%s\t|\t%s\t\t|\t%s\t|\t%s\t|\tDice \"%s\"\n",
                 dtf.format(now),
-                isOperatingSystemLogging? "Sistema Operati":"Proceso: " + t.getName() +"\t",
+                isOperatingSystemLogging? "Sistema Operati":"Proceso: " + t.getName() ,
                 isOperatingSystemLogging? "*\t":"PID: " + t.getId(),
                 convertLogLevelToString(level),
                 message

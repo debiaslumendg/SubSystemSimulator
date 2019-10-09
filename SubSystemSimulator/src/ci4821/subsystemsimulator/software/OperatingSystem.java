@@ -41,8 +41,11 @@ public class OperatingSystem {
     public void startProcess(String name, int nTextPages,int nDataPages,String pathRefs){
 
         if(nTextPages + nDataPages > PageTable.VIRTUAL_PAGES){
-            System.out.println("El número de páginas de texto y datos tienen que ser menor que " + PageTable.VIRTUAL_PAGES);
-            System.exit(1);
+            logger.logMessage( ConsoleLogger.Level.ERROR,
+                    "No se pudo crear proceso " + name +
+                            " el número de páginas de texto y datos tienen que ser menor que " +
+                            PageTable.VIRTUAL_PAGES);
+            return;
         }
 
         SymProcess procesoRunnable = new SymProcess(this,memoryManagerUnit, name, pathRefs, nTextPages, nDataPages);
@@ -104,7 +107,9 @@ public class OperatingSystem {
         if(tableEntry.isValueInDisk()) {
             memoryManagerUnit.pageFaultHandler(p, tableEntry,pageID);
         }else{
-            System.out.println("Proceso " + p.getPID() + " intentó acceder a una página incorrecta.");
+            logger.logMessage( ConsoleLogger.Level.PAGE_FAULT,
+                    "[ Proceso: " + p.getPID() + "] intentó acceder a [Página : " + pageID +
+                            "] no disponible en el SWAP Disk.");
         }
     }
 }

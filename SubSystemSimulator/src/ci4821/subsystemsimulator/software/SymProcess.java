@@ -15,14 +15,10 @@ import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class SymProcess implements Runnable {
 
@@ -30,7 +26,7 @@ public class SymProcess implements Runnable {
 	private OperatingSystem os;
     private MemoryManagerUnit mmu;
     private PageTable pageTable;
-    private ArrayList<Instruction> stringRef;
+    private ArrayList<Instruction> instrucciones;
     private String name;
     private int nTextPages, nDataPages;
     private int current = 0;
@@ -52,10 +48,10 @@ public class SymProcess implements Runnable {
 	/**
      * Crea el proceso
      * @param name      Nombre del proceso
-     * @param rutaRefs  Ruta al archivo que contiene las referencias a acceder en memoria
+     * @param rutaInstruccionesProc  Ruta al archivo que contiene los comandos con los que se accederá a la memoria
      */
     public SymProcess(OperatingSystem os,MemoryManagerUnit memoryManagerUnit, String name,
-    String rutaRefs, int nTextPages, int nDataPages){
+    String rutaInstruccionesProc, int nTextPages, int nDataPages){
 
     	this.os = os;
 
@@ -67,63 +63,104 @@ public class SymProcess implements Runnable {
 
         logger = ConsoleLogger.getInstance();
 
-		stringRef = new ArrayList<>(30);
+		instrucciones = new ArrayList<>(30);
 
-		List l = readFileInList(rutaRefs);
+		List l = readFileInList(rutaInstruccionesProc);
 
-		Iterator<String> itr = l.iterator();
+		Iterator itr = l.iterator();
 
 		String[] linea ;
 		while (itr.hasNext()) {
-			String instruction = itr.next();
+			String instruction = (String) itr.next();
 			linea = instruction.split(" ",3);
 			if (linea[0].equals("read")) {
-				stringRef.add(new Instruction(Operation.READ,Integer.parseInt(linea[1])));
-				//System.out.println("Agregada instruccion READ con " +  linea[0] + " " + linea[1] );
+				instrucciones.add(new Instruction(Operation.READ,linea));
 			}else if(linea[0].equals("write")){
-				stringRef.add(
-						new Instruction(
-								Operation.WRITE,
-								Integer.parseInt(linea[1]),
-								Integer.parseInt(linea[2])
-						));
-				//System.out.println("Agregada instruccion WRITE con " +  linea[0] + " " + linea[1] + " " + linea[2]);
+				instrucciones.add(new Instruction(Operation.WRITE,linea));
+			}else if(linea[0].equals("repeat")){
+				instrucciones.add(new Instruction(Operation.REPEAT,linea));
+			}else if(linea[0].equals("end_repeat")){
+				instrucciones.add(new Instruction(Operation.END_REPEAT,linea));
+			}else{
+				System.out.println("Error, instrucción " + instruction + ". No reconocida");
+				System.exit(1);
 			}
 		}
     }
 
 
+	public static int getRandomDoubleBetweenRange(double min, double max){
+		double x = (Math.random()*((max-min)+1))+min;
+		return (int) x;
+	}
     @Override
     public void run() {
-        
-		/*
-		 * int i = 5; int frameID = -1;
-		 */
 
 		int valueRead;
-        for (Instruction i : stringRef) {
+		String[] lineaComandos ;
 
-        	boolean success = false;
-        	do {
-	        	try {
-		        	switch(i.getOp()) {
-		        		case WRITE:
-		        			mmu.writeAddress(i.getPage(), i.getValue(),this);
-		        			break;
-		        		case READ:
-							valueRead = mmu.readAddress(i.getPage(), this);
-							break;
-		        	}
-		        	success = true;
-	        	} catch (PageFaultException e) {
-	        		os.handlePageFault(i.getPage(), this);
+		/**
+		 * Controlan la instrucción REPEAT para que funcione.
+		 *
+		 * repeat <n>
+		 * [read|write]  instrucciones a repetir
+		 * end_repeat
+		 */
+		int repeatCountMax		= -1;
+		int repeatCount			= -1;
+		int repeatLabelInicio 	= -1;
+
+		Instruction instruccion;
+		int i = 0;
+        while (i < instrucciones.size()) {
+
+			instruccion 		 = 	instrucciones.get(i);
+			lineaComandos =	instruccion.getValue();
+
+			if (instruccion.getOperation() == Operation.REPEAT){
+				repeatLabelInicio 	= i;
+				repeatCountMax		= Integer.parseInt(lineaComandos[1]);
+				repeatCount			= 0;
+			}else if(instruccion.getOperation() == Operation.END_REPEAT){
+				if(++repeatCount != repeatCountMax){
+					i = repeatLabelInicio + 1;
+					continue;
 				}
-        	} while (!success);
+			}
 
-			/*
-			 *  if(i-- == 1)  i = 5  // TODO: Dormir tiempo aleatorio para hacerlo mÃ¡s real
-			 *  //Thread.sleep()  
-			 */
+
+			try {
+				switch(instruccion.getOperation()) {
+					case WRITE:
+						if(lineaComandos[2].equals("RANDOM")){
+							lineaComandos[2] = String.valueOf(getRandomDoubleBetweenRange(0,2000));
+						}
+						mmu.writeAddress(
+								Integer.parseInt(lineaComandos[1]),
+								Integer.parseInt(lineaComandos[2]),
+								this);
+						break;
+					case READ:
+						valueRead = mmu.readAddress(Integer.parseInt(lineaComandos[1]), this);
+						break;
+				}
+
+			} catch (PageFaultException e) {
+				os.handlePageFault(Integer.parseInt(lineaComandos[1]), this);
+
+				/**
+				 * Ejecutamos esta instrucción  de nuevo! Hasta que el SO me lo arregle
+				 */
+				continue;
+			}
+
+			try {
+				Thread.sleep((long)(Math.random() * 2000));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			i ++;
         }
         
     }
@@ -140,8 +177,8 @@ public class SymProcess implements Runnable {
 	}
 
 
-	public ArrayList<Instruction> getStringRef() {
-		return stringRef;
+	public ArrayList<Instruction> getInstrucciones() {
+		return instrucciones;
 	}
 
 
@@ -172,31 +209,22 @@ class Instruction {
 	
 	private Operation op;
 	private int page;
-	private int value;
+	private String[] value;
 
-
-	public Instruction(Operation op, int page) {
-		this(op,page,-1);
-	}
-	public Instruction(Operation op, int page,int value) {
+	public Instruction(Operation op, String[] value) {
 		this.op = op;
-		this.page = page;
 		this.value = value;
 	}
 
-	public Operation getOp() {
+	public Operation getOperation() {
 		return op;
 	}
 
-	public int getPage() {
-		return page;
-	}
-
-	public int getValue() {
+	public String[] getValue() {
 		return value;
 	}
 }
 
 enum Operation {
-	READ, WRITE
+	READ, WRITE,REPEAT,END_REPEAT;
 }

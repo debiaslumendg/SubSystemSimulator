@@ -1,0 +1,51 @@
+read 0
+write 0 RANDOM
+read 0
+read 1
+read 3
+read 4
+read 5
+read 6
+read 7
+read 8
+read 9
+read 10
+read 11
+read 12
+read 13
+read 14
+read 15
+repeat 3
+read 0
+write 0 RANDOM
+read 1
+write 1 RANDOM
+read 2
+write 2 RANDOM
+read 3
+write 3 RANDOM
+read 4
+write 4 RANDOM
+read 5
+write 5 RANDOM
+read 6
+write 6 RANDOM
+read 7
+write 7 RANDOM
+read 8
+write 8 RANDOM
+read 9
+write 9 RANDOM
+read 10
+write 10 RANDOM
+read 11
+write 11 RANDOM
+read 12
+write 12 RANDOM
+read 13
+write 13 RANDOM
+read 14
+write 14 RANDOM
+read 15
+write 15 RANDOM
+end_repeat
