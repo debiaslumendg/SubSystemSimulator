@@ -12,9 +12,7 @@ como hilos, éstos serán pasados al simulador el cual los ejecutará, iniciando
 de páginas con las primeras del string de referencia, dependiendo de su cantidad de 
 páginas de TEXTO y DATOS, luego el sistema de operación irá asignando frames a sus 
 páginas en memoria a medida que el proceso las vaya solicitando. Cuando la memoria se 
-llene el simulador realiza el reemplazo con el algoritmo de **Reloj mejorado**,
-que colocará en la memoria swap la página reemplazada y asignará la que está
-solicitando memoria.
+llene el simulador realiza el reemplazo con el algoritmo de **Reloj mejorado**.
 
 ---
 
@@ -53,30 +51,23 @@ MemoryManagerUnit: Monitor
 
 MemoryEntry:
 + **frameOwnerPID**. ID/PID del proceso/hilo asignado al frame.
-+ value.
++ **value**. Data contenida dentro del frame de la entrada de memoria.
 
 ---
 
-### **Arquitectura de la tabla de página. Clases *PageTable*, *PageTableEntry*, *SwapTable* y *SwapTableEntry***
+### **Arquitectura de la tabla de página. Clases *PageTable* y *PageTableEntry***
 
 PageTable: Tabla de página del proceso
 + **VIRTUAL_PAGES**. Cantidad de páginas virtuales.
 + **pageTableEntries**. Entradas de la tabla de página.
 
 PageTableEntry:
-+ **virtualPageID**. Número de página.
++ **pageID**. Número de página.
 + **frameID**. Número de frame asociado en la memoria principal.
 + **referenced**. Bit de referncia que indica si el algoritmo de reemplazo la refenció.
 + **modified**. Bit de modificada.
 + **valid**. Bit de validez. Es válida si se encuentra en el rango [VIRTUAL_PAGES - nDataPages,VIRTUAL_PAGES - 1]
 
-SwapTable: Tabla de página en la memoria swap
-+ tableEntries.
-
-SwapTableEntry:
-+ NULL_VALUE.
-+ isInDisk.
-+ valueInDisk.
 ---
 
 ### **Arquitectura de los procesos. Clase *SymProcess***

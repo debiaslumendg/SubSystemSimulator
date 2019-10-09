@@ -1,17 +1,24 @@
 /**
- * 
+ * Clase que representa un frame en una entrada de la memoria principal.
  */
 
 package ci4821.subsystemsimulator.hardware;
 
 public class MemoryEntry {
 
+    /**
+     * ID/PID del proceso/hilo asignado al frame
+     */
     private long frameOwnerPID;
-    private int value;
+    /**
+     * Data contenida dentro del frame de la entrada de memoria.
+     */
+    private int data;
 
 
     MemoryEntry() {
         frameOwnerPID = -1;
+        data = -1;
     }
 
     public boolean isBeingUsed() {
@@ -22,16 +29,15 @@ public class MemoryEntry {
         this.frameOwnerPID = frameOwnerPID;
     }
 
-
     public long getIdFrameOwnerPID() {
         return this.frameOwnerPID;
     }
 
-    public int getValue() {
-        return value;
+    public int getData() {
+        return data;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setData(int data) {
+        this.data = data;
     }
 }

@@ -13,17 +13,12 @@ package ci4821.subsystemsimulator.hardware.pagetable;
 
 public class PageTableEntry {
 
-	// TODO: Discutir estos campos
-	
-    private int virtualPageID;
-    private int frameID;
-    private boolean modified;
-	private boolean referenced;
-    private boolean valid;
+    private int pageID, frameID;
+    private boolean modified, referenced, valid;
 
 	// Constructor
     public PageTableEntry(){
-        virtualPageID = -1;
+        pageID = -1;
         frameID = -1;
 		modified = false;
 		referenced = false;
@@ -31,11 +26,11 @@ public class PageTableEntry {
     }
 
 	public int getVirtualPageID() {
-		return virtualPageID;
+		return pageID;
 	}
 
 	public void setVirtualPageID(int virtualPageID) {
-		this.virtualPageID = virtualPageID;
+		this.pageID = virtualPageID;
 	}
 
 	public int getFrameID() {

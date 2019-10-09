@@ -52,10 +52,10 @@ public class MemoryManagerUnit {
                 mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
 
             logger.logMessage(ConsoleLogger.Level.READ_PAGE,
-                    "[Frame : " + realMemoryAddress + "] -> Valor : " + mainMemory[realMemoryAddress].getValue());
+                    "[Frame : " + realMemoryAddress + "] -> Valor : " + mainMemory[realMemoryAddress].getData());
 
             p.getPageTable().getPage(pageID).setReferenced(true);
-            return mainMemory[realMemoryAddress].getValue();
+            return mainMemory[realMemoryAddress].getData();
 
         } else {
             throw new PageFaultException();
@@ -79,11 +79,13 @@ public class MemoryManagerUnit {
 
     	if (realMemoryAddress != -1&&
                 mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
-    	    p.getPageTable().getPage(pageID).setModified(true);
-            mainMemory[realMemoryAddress].setValue(value);
+            
+            p.getPageTable().getPage(pageID).setModified(true);
+            mainMemory[realMemoryAddress].setData(value);
+            
             logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
                     "Escribió en [ Frame: " + realMemoryAddress + "] Valor: " +
-                            mainMemory[realMemoryAddress].getValue());
+                            mainMemory[realMemoryAddress].getData());
     	} else {
     		throw new PageFaultException();
     	}
@@ -103,9 +105,8 @@ public class MemoryManagerUnit {
      */
 
     synchronized public void pageFaultHandler(SymProcess p, SwapTableEntry entry, int virtualPageID) {
-        // TODO: falta
         // TODO: Asignarle memoria si hay
-        // TODO: Ejecutar algoritmo de reemplazo de ser necesario
+        // Ejecutar algoritmo de reemplazo de ser necesario
         System.out.println("Pafe Fault Handler para Proceso: " + p.getPID() + " virtualPageID : " + virtualPageID);
 
         for(int i = 0; i < N_FRAMES;i++){
@@ -115,7 +116,7 @@ public class MemoryManagerUnit {
                 mainMemory[i].setFrameOwnerPID(p.getPID());
 
                 // SWAP valor en disco a memoria
-                mainMemory[i].setValue(entry.getValueInDisk());
+                mainMemory[i].setData(entry.getValueInDisk());
 
                 p.getPageTable().setFrameID(virtualPageID,i);
                 return;
