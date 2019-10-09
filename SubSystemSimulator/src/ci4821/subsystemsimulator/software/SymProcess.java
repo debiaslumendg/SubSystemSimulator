@@ -1,6 +1,7 @@
 /**
  *
- * Proceso a emular representado como un hilo para su ejecuciÃ³n.
+ * Representa un Proceso que se emulará.
+ * Es administrado como un hilo.
  *
  *  Autores:
  *      Natscha Gamboa      12-11250
@@ -22,16 +23,36 @@ import java.util.*;
 
 public class SymProcess implements Runnable {
 
+	// Referencia al logger
 	private final ConsoleLogger logger;
+
+	// Referencia a la clase SO ,para los Page Fault
 	private OperatingSystem os;
+
+	// Referencia al MMU, para acceder a memoria
     private MemoryManagerUnit mmu;
+
+    // Tabla con valores [PAGINA VIRTUAL ID] -> [FRAME ID]
     private PageTable pageTable;
+
+    // Instrucciones leidas del archivo
     private ArrayList<Instruction> instrucciones;
+
+    // Nombre de este proceso
     private String name;
+
+    // Cantidad de paginas de texto y datos asignadas por el SO
     private int nTextPages, nDataPages;
-    private int current = 0;
+
+	// Guarda el PID -- Que en este caso es igual a Thread.getId()
 	private Long pid;
 
+
+	/**
+	 * Lee un archivo y regresa un iterable
+	 * @param fileName nomre-ruta del archivo a leer
+	 * @return iterable para cada linea
+	 */
 	public static List<String> readFileInList(String fileName)
 	{
 		List<String> lines = Collections.emptyList();
@@ -69,18 +90,22 @@ public class SymProcess implements Runnable {
 
 		Iterator itr = l.iterator();
 
-		String[] linea ;
+		String[] tokens ;
+
 		while (itr.hasNext()) {
+
+			// Se lee la linea instruccion
 			String instruction = (String) itr.next();
-			linea = instruction.split(" ",3);
-			if (linea[0].equals("read")) {
-				instrucciones.add(new Instruction(Operation.READ,linea));
-			}else if(linea[0].equals("write")){
-				instrucciones.add(new Instruction(Operation.WRITE,linea));
-			}else if(linea[0].equals("repeat")){
-				instrucciones.add(new Instruction(Operation.REPEAT,linea));
-			}else if(linea[0].equals("end_repeat")){
-				instrucciones.add(new Instruction(Operation.END_REPEAT,linea));
+			// Se separa por tokens
+			tokens = instruction.split(" ",3);
+			if (tokens[0].equals("read")) {
+				instrucciones.add(new Instruction(Operation.READ,tokens));
+			}else if(tokens[0].equals("write")){
+				instrucciones.add(new Instruction(Operation.WRITE,tokens));
+			}else if(tokens[0].equals("repeat")){
+				instrucciones.add(new Instruction(Operation.REPEAT,tokens));
+			}else if(tokens[0].equals("end_repeat")){
+				instrucciones.add(new Instruction(Operation.END_REPEAT,tokens));
 			}else{
 				System.out.println("Error, instrucción " + instruction + ". No reconocida");
 				System.exit(1);
@@ -89,7 +114,7 @@ public class SymProcess implements Runnable {
     }
 
 
-	public static int getRandomDoubleBetweenRange(double min, double max){
+	public static int getRandomIntBetweenRange(double min, double max){
 		double x = (Math.random()*((max-min)+1))+min;
 		return (int) x;
 	}
@@ -115,9 +140,10 @@ public class SymProcess implements Runnable {
         while (i < instrucciones.size()) {
 
 			instruccion 		 = 	instrucciones.get(i);
-			lineaComandos =	instruccion.getValue();
+			lineaComandos =	instruccion.getLineTokens();
 
 			if (instruccion.getOperation() == Operation.REPEAT){
+				// Si se encuentra una instruccion repeat se guarda esta posicion de la instruccion
 				repeatLabelInicio 	= i;
 				repeatCountMax		= Integer.parseInt(lineaComandos[1]);
 				repeatCount			= 0;
@@ -133,7 +159,7 @@ public class SymProcess implements Runnable {
 				switch(instruccion.getOperation()) {
 					case WRITE:
 						if(lineaComandos[2].equals("RANDOM")){
-							lineaComandos[2] = String.valueOf(getRandomDoubleBetweenRange(0,2000));
+							lineaComandos[2] = String.valueOf(getRandomIntBetweenRange(0,2000));
 						}
 						mmu.writeAddress(
 								Integer.parseInt(lineaComandos[1]),
@@ -205,23 +231,25 @@ public class SymProcess implements Runnable {
 	}
 }
 
+/**
+ * Se refiere a una instrucción del archivo de un proceso.
+ */
 class Instruction {
 	
-	private Operation op;
-	private int page;
-	private String[] value;
+	private Operation operation; // La operación que se ejecuta
+	private String[] lineTokens; // Array de String con la linea separada por tokens
 
-	public Instruction(Operation op, String[] value) {
-		this.op = op;
-		this.value = value;
+	public Instruction(Operation operation, String[] lineTokens) {
+		this.operation = operation;
+		this.lineTokens = lineTokens;
 	}
 
 	public Operation getOperation() {
-		return op;
+		return operation;
 	}
 
-	public String[] getValue() {
-		return value;
+	public String[] getLineTokens() {
+		return lineTokens;
 	}
 }
 
