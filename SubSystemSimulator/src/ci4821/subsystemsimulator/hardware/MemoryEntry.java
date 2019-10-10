@@ -11,14 +11,14 @@ public class MemoryEntry {
      */
     private long frameOwnerPID;
     /**
-     * Data contenida dentro del frame.
+     * Número de página asignado al frame de la memoria.
      */
-    private int data;
+    private int page;
 
 
     MemoryEntry() {
         frameOwnerPID = -1;
-        data = -1;
+        page = -1;
     }
 
     public boolean isBeingUsed() {
@@ -29,15 +29,15 @@ public class MemoryEntry {
         this.frameOwnerPID = frameOwnerPID;
     }
 
-    public long getIdFrameOwnerPID() {
+    public long getFrameOwnerPID() {
         return this.frameOwnerPID;
     }
 
-    public int getData() {
-        return data;
+    public void setPage(int page) {
+        this.page = page;
     }
-
-    public void setData(int data) {
-        this.data = data;
+    
+    public int getPage() {
+        return page;
     }
 }

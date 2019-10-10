@@ -29,17 +29,32 @@ public class PageTable {
 		}
 	}
 
-	public PageTableEntry getPage(int pageIndex) {
-		return pageTableEntries[pageIndex];
+	/**
+	 * Obtiene la entrada asociada a la página.
+	 * 
+	 * @param processPageID		Entrada en la tabla de página.
+	 * @return
+	 */
+	public PageTableEntry getPage(int processPageID) {
+		return pageTableEntries[processPageID];
 	}
 
 	/**
-	 * Asigna a la entrada de tabla de página una página del string de
-	 * referencia del proceso
-	 * @param processPageID Página del string de referencia del proceso
-	 * @param pageIndex		Entrada en la tabla de página
+	 * Asigna a la página el frame que le fue asignado en la memoria principal.
+	 * 
+	 * @param processPageID 	Entrada en la tabla de página.
+	 * @param pageFrame			Frame asignado en memoria.
 	 */
-	public void setPage(int processPageID, int pageIndex) {
-		pageTableEntries[pageIndex].setProcessPageID(processPageID);
+	public void setFrameToPage(int processPageID, int pageFrame) {
+		pageTableEntries[processPageID].setFrameID(pageFrame);
+	}
+
+	/**
+	 * Obtiene el frame asociado a la página.
+	 * 
+	 * @param processPageID		Entrada en la tabla de página.
+	 */
+	public int getFrameID(int processPageID) {
+		return pageTableEntries[processPageID].getFrameID();
 	}
 }

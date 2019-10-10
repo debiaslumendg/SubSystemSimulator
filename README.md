@@ -44,7 +44,7 @@ páginas de los procesos que están en ejecución.
 MemoryManagerUnit: Monitor
 + **SIZE**. Tamaño de la memoria a simular en KB.
 + **PAGE_SIZE**. Tamaño de página en KB.
-+ **TOTAL_FRAMES**. Cantidad total de los frames de la memoria principal.
++ **TOTAL_FRAMES**. Cantidad total de los frames de la memoria principal. SIZE / PAGE_SIZE
 + **mainMemory**. Representación de los frames de la memoria principal.
 + Llama al algoritmo de reemplazo.
 + Actualiza la tabla de página y los frames de la memoria principal.
@@ -52,7 +52,7 @@ MemoryManagerUnit: Monitor
 
 MemoryEntry:
 + **frameOwnerPID**. ID/PID del proceso/hilo asignado al frame.
-+ **data**. Data contenida dentro del frame.
++ **page**. Número de página asignado al frame de la memoria.
 
 ---
 
@@ -63,11 +63,8 @@ PageTable: Tabla de página del proceso
 + **pageTableEntries**. Representación de la tabla de página.
 
 PageTableEntry:
-+ **processPageID**. Guarda uno de los números de página del string de referencia del proceso.
 + **frameID**. Dirección del frame asociado en la memoria principal.
 + **referenced**. Indica si el algoritmo de reemplazo la refenció.
-+ **modified**. Indica si la página que tiene asociada fué modificada.
-+ **valid**. Bit de validez. Es válida si se encuentra en el rango [VIRTUAL_PAGES - nDataPages,VIRTUAL_PAGES - 1]
 
 ---
 
@@ -82,14 +79,11 @@ Parámetros:
 + **name**. ID.
 + **stringRef**. String de referencia. Se lee desde un archivo “.txt”
 + **pageTable**. Tabla de páginas.
-+ **mmu**. Representa el MMU, el mismo proceso maneja su memoria.
-+ **nTextPages**. Cantidad de páginas de texto.
-+ **nDataPages**. Cantidad de páginas de datos.
-+ **pid**.
++ **pid**. PID asignado al crearse como hilo.
 
 ---
 
-### **Algoritmo de reemplazo. Reloj mejorado. Clase *ClockAlgorithm***
+### **Algoritmo de reemplazo. Reloj. Clase *ClockAlgorithm***
 
 Reemplaza la página con el bit de referencia en cero y primero las no modificadas
 antes que las modificadas. Para simular los page faults que puedan ocurrir con
@@ -98,7 +92,6 @@ cada cierto tiempo.
 
 Parámetros:
 + **bitRef**. Indica si la página está en memoria o no.
-+ **bitModified**. Indica si la página de datos ha sido modificada o no.
 
 ---
 

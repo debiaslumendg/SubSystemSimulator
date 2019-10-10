@@ -1,10 +1,9 @@
 /**
- *
  * Logger para los mensajes del emulador
  *
  *  Autores:
- *      Natscha Gamboa      12-11250
- * 	    Manuel  GonzÃ¡lez    11-10390
+ *      Natascha Gamboa      12-11250
+ * 	    Manuel  Gonzalez    11-10390
  * 	    Pedro   Perez       10-10574
  */
 

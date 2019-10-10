@@ -4,9 +4,11 @@
 package ci4821.subsystemsimulator.hardware;
 
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
-import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
+import ci4821.subsystemsimulator.software.ClockAlgorithm;
 import ci4821.subsystemsimulator.software.SymProcess;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
+
+import java.util.ArrayList;
 
 public class MemoryManagerUnit {
 
@@ -25,116 +27,52 @@ public class MemoryManagerUnit {
     /**
      * Representacion de los frames de la memoria principal.
      */
-    private MemoryEntry[] mainMemory;
-    private ConsoleLogger logger;
+    private ArrayList<MemoryEntry> mainMemory;
+    private ClockAlgorithm clockAlgorithm;
 
     public MemoryManagerUnit() {
-
-    	mainMemory = new MemoryEntry[TOTAL_FRAMES];
-        logger = ConsoleLogger.getInstance();
-
-        // Inicialización de los frames de la memoria
-    	for(int i = 0; i < TOTAL_FRAMES;i++){
-    	    mainMemory[i] = new MemoryEntry();
-        }
+        mainMemory = new ArrayList<>(TOTAL_FRAMES);
+        clockAlgorithm = new ClockAlgorithm();
     }
 
     /**
-     * Utilizamos un método monitor para que solo 1 proceso acceda a la memoria.
-     * @param pageID ID de la página accedida
+     * Le asigna memoria a la página del proceso sino tiene, sino la referencia.
+     * 
+     * @param processPage   Página a ser asignada
+     * @param p             Proceso
      * @throws PageFaultException
-     * @return
      */
-    synchronized public int readAddress(int pageID, SymProcess p) throws PageFaultException {
-        //TODO: Chequear si no hay page faulteros para darles prioridad
-        int realMemoryAddress = translateAddress(pageID, p.getPageTable());
+    synchronized public void setPageInMemory(int processPage, SymProcess p) throws PageFaultException {
 
+        int pageFrame = p.getPageTable().getFrameID(processPage);
+        
+        // Si la página no está en memoria, asignarle y vericar que el proceso sea el actual
+        if(pageFrame != -1) {
 
-        logger.logMessage(ConsoleLogger.Level.READ_PAGE,"Leyendo [ Página: " + pageID + "] -> [Frame : " + realMemoryAddress + "]");
+            if(mainMemory.get(pageFrame).getFrameOwnerPID() == Thread.currentThread().getId()) {
 
-        if(realMemoryAddress != -1 &&
-                mainMemory[realMemoryAddress].getIdFrameOwnerPID() != Thread.currentThread().getId()){
-            logger.logMessage(ConsoleLogger.Level.READ_PAGE,
-                    "Error , no puedes leer ese frame. [Frame : " + realMemoryAddress + "] es de [ Proceso : " +
-                            mainMemory[realMemoryAddress].getIdFrameOwnerPID() +"]");
-        }
-
-        if (realMemoryAddress != -1 &&
-                mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
-
-            logger.logMessage(ConsoleLogger.Level.READ_PAGE,
-                    "[Frame : " + realMemoryAddress + "] -> Valor : " + mainMemory[realMemoryAddress].getData());
-
-            p.getPageTable().getPage(pageID).setReferenced(true);
-            return mainMemory[realMemoryAddress].getData();
-
-        } else {
-            throw new PageFaultException();
-        }
-    }
-    
-    synchronized public void writeAddress(int pageID, int value, SymProcess p) throws PageFaultException {
-        //TODO: Chequear si no hay page faulteros para darles prioridad
-        int realMemoryAddress = translateAddress(pageID, p.getPageTable());
-
-        logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
-                "Escribiendo a [ Página: " + pageID + "] -> [Frame : " + realMemoryAddress + "] Valor: " +
-                        value);
-
-        if(realMemoryAddress != -1 &&
-                mainMemory[realMemoryAddress].getIdFrameOwnerPID() != Thread.currentThread().getId()){
-            logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
-                    "Error , no puedes escribir ahí. [Frame : " + realMemoryAddress + "] es de [ Proceso : " +
-                            mainMemory[realMemoryAddress].getIdFrameOwnerPID() +"]");
-        }
-
-    	if (realMemoryAddress != -1&&
-                mainMemory[realMemoryAddress].getIdFrameOwnerPID() == Thread.currentThread().getId()) {
-            
-            p.getPageTable().getPage(pageID).setModified(true);
-            mainMemory[realMemoryAddress].setData(value);
-            
-            logger.logMessage(ConsoleLogger.Level.WRITE_PAGE,
-                    "Escribió en [ Frame: " + realMemoryAddress + "] Valor: " +
-                            mainMemory[realMemoryAddress].getData());
-    	} else {
-    		throw new PageFaultException();
-    	}
-    }
-
-    private int translateAddress(int pageID, PageTable pt) {
-    	return pt.getFrameID(pageID);
-    }
-    
-    /**
-     * Este pageFaultHandler no lo veo correcto estando miembro de PhysicalMemoryUnit?
-     * Pero si consideramos que se tienen que sincronizar los procesos para que
-     * dos procesos no accedan a este método y que si un método está aquí no tiene que estar en
-     * accessAddress ... TODO: falta pensarlo más aquí
-     * @param p
-     * @param virtualPageID
-     */
-
-    synchronized public void pageFaultHandler(SymProcess p, SwapTableEntry entry, int virtualPageID) {
-        // TODO: Asignarle memoria si hay
-        // Ejecutar algoritmo de reemplazo de ser necesario
-        System.out.println("Pafe Fault Handler para Proceso: " + p.getPID() + " virtualPageID : " + virtualPageID);
-
-        for(int i = 0; i < TOTAL_FRAMES;i++){
-            if (!mainMemory[i].isBeingUsed()){
-
-                System.out.println("Frame " + i + " está libre, asignado al proceso: " + p.getPID() );
-                mainMemory[i].setFrameOwnerPID(p.getPID());
-
-                // SWAP valor en disco a memoria
-                mainMemory[i].setData(entry.getValueInDisk());
-
-                p.getPageTable().setFrameID(virtualPageID,i);
-                return;
+                MemoryEntry memoryEntry = new MemoryEntry();
+                memoryEntry.setFrameOwnerPID(p.getPID());
+                memoryEntry.setPage(processPage);
+                
+                // Si se le asigna memoria a la página del proceso, se actualiza su tabla de página
+                if(mainMemory.add(memoryEntry)) {
+        
+                    int frame = mainMemory.indexOf(memoryEntry);
+                    p.getPageTable().setFrameToPage(processPage, frame);
+                }
+                else { // Sino page fault y llama al algoritmo de reemplazo
+                    
+                    throw new PageFaultException();
+                    clockAlgorithm.start();
+                }
+            }
+            else {
+                
             }
         }
-
-        // No encontró ningún frame libre, entonces llama al algoritmo de reemplazo
+        else { // Sino actualizar su bit referencia
+            p.getPageTable().getPage(processPage).setReferenced(true);
+        }
     }
-
 }
