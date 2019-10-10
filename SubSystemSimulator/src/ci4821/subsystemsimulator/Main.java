@@ -46,7 +46,17 @@ public class Main {
      */
     public static ArrayList<Integer> generateRandomStringRef(int maxPages) {
 
-        ArrayList<Integer> stringRef;
+        ArrayList<Integer> stringRef = new ArrayList<>(10);
+        stringRef.add(1);
+        stringRef.add(10);
+        stringRef.add(11);
+        stringRef.add(4);
+        stringRef.add(5);
+        stringRef.add(9);
+        stringRef.add(3);
+        stringRef.add(2);
+        stringRef.add(1);
+        stringRef.add(14);
 
         // generacion aleatoria con tamaño aleatorio
 

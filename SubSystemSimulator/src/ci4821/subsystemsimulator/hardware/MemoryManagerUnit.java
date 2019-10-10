@@ -9,7 +9,6 @@ import ci4821.subsystemsimulator.hardware.pagetable.PageTableEntry;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MemoryManagerUnit {
 

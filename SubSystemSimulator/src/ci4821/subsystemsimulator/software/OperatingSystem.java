@@ -59,10 +59,10 @@ public class OperatingSystem {
     public void killProcess(SymProcess p) {
 
         PageTableEntry[] ptes = p.getPageTable().getEntries();
-        
+
         for(int i = 0; i < ptes.length; i++ ) {
 
-            mmu.removePageFromMemory(i, page.getFrameID(), p);
+            mmu.removePageFromMemory(i, ptes[i].getFrameID(), p);
         }
     }
 
