@@ -10,6 +10,7 @@ package ci4821.subsystemsimulator.software;
 
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
+import ci4821.subsystemsimulator.hardware.pagetable.PageTableEntry;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 import java.util.HashMap;
@@ -51,8 +52,18 @@ public class OperatingSystem {
         process.start();
     }
 
-    // TODO: Metodo que mata a los procesos
-    public void killProcess() {
+    /**
+     * Mata el proceso quitándole toda la memoria asignada
+     * 
+     */
+    public void killProcess(SymProcess p) {
+
+        PageTableEntry[] ptes = p.getPageTable().getEntries();
+        
+        for(int i = 0; i < ptes.length; i++ ) {
+
+            mmu.removePageFromMemory(i, page.getFrameID(), p);
+        }
     }
 
     /**

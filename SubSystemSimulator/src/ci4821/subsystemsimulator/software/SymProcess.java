@@ -40,6 +40,8 @@ public class SymProcess implements Runnable {
 
 			so.asingMemory(page,this);
 		}
+
+		so.killProcess(this);
     }
     
 	public PageTable getPageTable() {

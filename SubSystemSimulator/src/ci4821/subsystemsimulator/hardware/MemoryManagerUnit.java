@@ -9,6 +9,7 @@ import ci4821.subsystemsimulator.hardware.pagetable.PageTableEntry;
 import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MemoryManagerUnit {
 
@@ -72,6 +73,22 @@ public class MemoryManagerUnit {
         }
     }
 
+    /**
+     * Le quita la memoria a la página del proceso cuado el proceso ya terminó de
+     * ejecutarse o se mata
+     * 
+     * @param processPage   Página a ser removida
+     * @param pageFrame     Frame en dónde se encuentra la página
+     * @param p
+     */
+    synchronized public void removePageFromMemory(int processPage, int pageFrame, SymProcess p) {
+
+        MemoryEntry frame = mainMemory.get(pageFrame);
+        frame.setFrameOwnerPID(-1);
+        frame.setPageID(-1);
+        p.getPageTable().setFrameToPage(processPage, -1);
+    }
+
     synchronized public void clockAlgorithm(int processPage, SymProcess p) {
 
         pageFaults++;
@@ -94,5 +111,10 @@ public class MemoryManagerUnit {
                 pte.setReferenced(false);
             }
         }
+
+        // Si todas las páginas tienen el bit de referencia en 1,
+        // colocar en 0 el de una página en aleatorio y llamar nuevamente el algoritmo
+        pt.getPageEntry(0).setReferenced(false);
+        clockAlgorithm(processPage, p);
     }
 }
