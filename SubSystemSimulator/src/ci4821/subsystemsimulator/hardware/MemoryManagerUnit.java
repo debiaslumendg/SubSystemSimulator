@@ -6,7 +6,6 @@ package ci4821.subsystemsimulator.hardware;
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.software.ClockAlgorithm;
 import ci4821.subsystemsimulator.software.SymProcess;
-import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 import java.util.ArrayList;
 
@@ -63,8 +62,8 @@ public class MemoryManagerUnit {
                 }
                 else { // Sino page fault y llama al algoritmo de reemplazo
                     
-                    throw new PageFaultException();
                     clockAlgorithm.start();
+                    throw new PageFaultException();
                 }
             }
             else {

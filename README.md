@@ -88,7 +88,7 @@ Parámetros:
 Reemplaza la página con el bit de referencia en cero y primero las no modificadas
 antes que las modificadas. Para simular los page faults que puedan ocurrir con
 el algoritmo se vaciará toda la memoria principal o se matará uno o más procesos
-cada cierto tiempo.
+cada cierto tiempo, también ocurren si hay muchos procesos pidiendo memoria.
 
 Parámetros:
 + **bitRef**. Indica si la página está en memoria o no.

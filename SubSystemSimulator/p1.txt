@@ -1,8 +1,0 @@
-read 1
-write 1 65
-read 3
-write 15 65
-read 3
-write 15 65
-read 3
-write 15 65

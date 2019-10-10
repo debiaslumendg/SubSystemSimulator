@@ -50,6 +50,7 @@ public class OperatingSystem {
         process.start();
     }
 
+    // TODO: Metodo que mata a los procesos
     public void killProcess() {
     }
 

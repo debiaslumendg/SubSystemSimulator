@@ -8,7 +8,6 @@
 package ci4821.subsystemsimulator;
 
 import ci4821.subsystemsimulator.software.OperatingSystem;
-import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 public class Main {
 
@@ -18,7 +17,9 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        /** Simulador*/
+        /**
+         * Simulador
+         */
         OperatingSystem operatingSystem = new OperatingSystem();
 
         // Inicializacion de los procesos
