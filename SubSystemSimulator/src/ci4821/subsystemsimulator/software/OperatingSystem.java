@@ -8,12 +8,13 @@
  */
 package ci4821.subsystemsimulator.software;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ci4821.subsystemsimulator.exceptions.PageFaultException;
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
 
 public class OperatingSystem {
 
@@ -21,9 +22,9 @@ public class OperatingSystem {
     private MemoryManagerUnit mmu;
     private Map<Long, Thread> processes;
 
-    public OperatingSystem() {
+    public OperatingSystem(int memorySize) {
 
-        this.mmu = new MemoryManagerUnit();
+        this.mmu = new MemoryManagerUnit(memorySize);
         this.processes = new HashMap<Long, Thread>();
         logger = ConsoleLogger.getInstance();
         logger.logMessage(ConsoleLogger.Level.INFO, "Creadas estructuras para la emulación");
@@ -36,7 +37,7 @@ public class OperatingSystem {
      * @param name      Nombre del proceso
      * @param refString String de referencia
      */
-    public void startProcess(String name, String refString) {
+    public void startProcess(String name, ArrayList<Integer> refString) {
 
         SymProcess proceso = new SymProcess(name, refString, this);
         Thread process = new Thread(proceso, name);

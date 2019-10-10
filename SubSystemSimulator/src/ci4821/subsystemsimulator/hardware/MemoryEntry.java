@@ -7,7 +7,7 @@ package ci4821.subsystemsimulator.hardware;
 public class MemoryEntry {
 
     /**
-     * ID/PID del proceso/hilo asignado al frame.
+     * PID del proceso/hilo asignado al frame.
      */
     private long frameOwnerPID;
     /**
@@ -33,11 +33,11 @@ public class MemoryEntry {
         return this.frameOwnerPID;
     }
 
-    public void setPage(int page) {
+    public void setPageID(int page) {
         this.page = page;
     }
     
-    public int getPage() {
+    public int getPageID() {
         return page;
     }
 }

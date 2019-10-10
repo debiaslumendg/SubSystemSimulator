@@ -25,12 +25,12 @@ public class SymProcess implements Runnable {
      * @param name      Nombre del proceso
      * @param rutaRefs  Ruta al archivo que contiene las referencias a acceder en memoria
      */
-    public SymProcess(String name, String stringRef, OperatingSystem so){
+    public SymProcess(String name, ArrayList<Integer> stringRef, OperatingSystem so){
 
         this.name       = name;
 		this.so			= so;
+		this.stringRef 	= stringRef;
 		this.pageTable  = new PageTable();
-		this.stringRef 	= new ArrayList<>(stringRef.length());
     }
 
     @Override

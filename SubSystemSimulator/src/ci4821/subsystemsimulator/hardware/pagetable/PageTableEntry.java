@@ -23,7 +23,7 @@ public class PageTableEntry {
 
     public PageTableEntry(){
         frameID = -1;
-		referenced = false;
+		referenced = true;
     }
 
 	public int getFrameID() {

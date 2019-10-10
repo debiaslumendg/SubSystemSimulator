@@ -42,16 +42,17 @@ Será representada como un array de enteros que contiene los números de las
 páginas de los procesos que están en ejecución.
 
 MemoryManagerUnit: Monitor
-+ **SIZE**. Tamaño de la memoria a simular en KB.
++ **size**. Tamaño de la memoria a simular en KB.
 + **PAGE_SIZE**. Tamaño de página en KB.
-+ **TOTAL_FRAMES**. Cantidad total de los frames de la memoria principal. SIZE / PAGE_SIZE
++ **totalFrames**. Cantidad total de los frames de la memoria principal. size / PAGE_SIZE
 + **mainMemory**. Representación de los frames de la memoria principal.
-+ Llama al algoritmo de reemplazo.
++ **pageFaults**. Cantidad de page faults ocurridos
++ Llama al algoritmo de reemplazo **clockAlgorithm**.
 + Actualiza la tabla de página y los frames de la memoria principal.
 
 
 MemoryEntry:
-+ **frameOwnerPID**. ID/PID del proceso/hilo asignado al frame.
++ **frameOwnerPID**. PID del proceso/hilo asignado al frame.
 + **page**. Número de página asignado al frame de la memoria.
 
 ---
@@ -83,7 +84,7 @@ Parámetros:
 
 ---
 
-### **Algoritmo de reemplazo. Reloj. Clase *ClockAlgorithm***
+### **Algoritmo de reemplazo. Reloj. Función *clockAlgorithm***
 
 Reemplaza la página con el bit de referencia en cero y primero las no modificadas
 antes que las modificadas. Para simular los page faults que puedan ocurrir con
@@ -91,7 +92,8 @@ el algoritmo se vaciará toda la memoria principal o se matará uno o más proce
 cada cierto tiempo, también ocurren si hay muchos procesos pidiendo memoria.
 
 Parámetros:
-+ **bitRef**. Indica si la página está en memoria o no.
++ **p**. Proceso al que se le actualizará la tabla de página
++ **processPage**. Página que reemplazará a otra en la memoria.
 
 ---
 

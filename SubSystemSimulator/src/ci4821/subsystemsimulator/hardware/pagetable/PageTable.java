@@ -29,13 +29,16 @@ public class PageTable {
 		}
 	}
 
+	public PageTableEntry[] getEntries(){
+		return pageTableEntries;
+	}
+
 	/**
 	 * Obtiene la entrada asociada a la página.
 	 * 
 	 * @param processPageID		Entrada en la tabla de página.
-	 * @return
 	 */
-	public PageTableEntry getPage(int processPageID) {
+	public PageTableEntry getPageEntry(int processPageID) {
 		return pageTableEntries[processPageID];
 	}
 
