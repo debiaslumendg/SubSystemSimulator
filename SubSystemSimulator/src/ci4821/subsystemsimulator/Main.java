@@ -10,7 +10,6 @@ package ci4821.subsystemsimulator;
 import ci4821.subsystemsimulator.software.OperatingSystem;
 
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -28,38 +27,26 @@ public class Main {
         System.out.print("Introduzca la cantidad de procesos a simular: ");
         int process = in.nextInt();
         
-        OperatingSystem operatingSystem = new OperatingSystem(memorySize);
+        OperatingSystem os = new OperatingSystem(memorySize);
 
         // Inicializacion de los procesos
         for(int i = 0; i < process; i++) {
-
-            operatingSystem.startProcess("p" + i, generateRandomStringRef(16));
+        	System.out.print("Introduzca el tamaño del proceso " + i + ":");
+        	os.createProcess(in.nextInt());
         }
+        in.close();
+        
+        os.startProcesses();
+        
+        for (Thread p : os.getProcesses()) {
+        	try {
+				p.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
     }
-    
-    /**
-     * Genera un string de referencia aleatorio entre 0 y un número máximo
-     * de páginas
-     * 
-     * @param maxPages  Máximo número de las páginas del string de referencia
-     * @return
-     */
-    public static ArrayList<Integer> generateRandomStringRef(int maxPages) {
 
-        ArrayList<Integer> stringRef = new ArrayList<>(10);
-        stringRef.add(1);
-        stringRef.add(10);
-        stringRef.add(11);
-        stringRef.add(4);
-        stringRef.add(5);
-        stringRef.add(9);
-        stringRef.add(3);
-        stringRef.add(2);
-        stringRef.add(1);
-        stringRef.add(14);
-
-        // generacion aleatoria con tamaño aleatorio
-
-        return stringRef;
-    }
 }

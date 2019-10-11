@@ -20,7 +20,8 @@ public class ConsoleLogger {
         ERROR,
         READ_PAGE,
         WRITE_PAGE,
-        NUEVO_PROCESO
+        NUEVO_PROCESO,
+        PROCESO_INICIADO
     }
 
     private static volatile ConsoleLogger sSoleInstance = new ConsoleLogger();
@@ -73,6 +74,8 @@ public class ConsoleLogger {
                 return "Escribiendo";
             case NUEVO_PROCESO:
                 return "Nuevo Proc";
+            case PROCESO_INICIADO:
+                return "Proc Inic";
             default:
                 throw new IllegalStateException("Unexpected value: " + level);
         }

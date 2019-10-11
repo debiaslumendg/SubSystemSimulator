@@ -8,57 +8,35 @@
  */
 package ci4821.subsystemsimulator.software;
 
-import ci4821.subsystemsimulator.hardware.pagetable.PageTable;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
-import java.util.ArrayList;
+import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 public class SymProcess implements Runnable {
 
+	private final ConsoleLogger logger;
 	private OperatingSystem so;
-    private PageTable pageTable;
-    private ArrayList<Integer> stringRef;
-    private String name;
+    private List<Integer> references;
 	private Long pid;
-
-	/**
-     * Crea el proceso
-     * @param name      Nombre del proceso
-     * @param rutaRefs  Ruta al archivo que contiene las referencias a acceder en memoria
-     */
-    public SymProcess(String name, ArrayList<Integer> stringRef, OperatingSystem so){
-
-        this.name       = name;
+	
+    public SymProcess(int size, OperatingSystem so){
 		this.so			= so;
-		this.stringRef 	= stringRef;
-		this.pageTable  = new PageTable();
-    }
-
-    @Override
-    public void run() {
-
-		for(Integer page : stringRef) {
-
-			so.asingMemory(page,this);
-		}
-
-		so.killProcess(this);
+		this.pid		= so.getNewPID();
+		this.references = (new Random()).ints(size, 0, size).boxed().collect(Collectors.toList());
+        logger = ConsoleLogger.getInstance();
     }
     
-	public PageTable getPageTable() {
-		return pageTable;
-	}
+    @Override
+    public void run() {
+    	
+		for(Integer page : references) {
+			so.referencePage(page,this);
+			logger.logMessage(ConsoleLogger.Level.INFO, "Referenciando página " + page + " en el proceso " + pid);
+		}
 
-	public ArrayList<Integer> getStringRef() {
-		return stringRef;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setPID(Long newPid) {
-		this.pid = newPid;
-	}
+    }
 
 	public Long getPID() {
 		return pid;
