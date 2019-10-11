@@ -88,6 +88,9 @@ public class OperatingSystem {
     
     private void evictProcessPage(int targetPageFrame) {
     	PageFrame pf = mmu.getPageFrame(targetPageFrame);
-		pageTables.get(pf.getFrameOwnerPID()).set(pf.getPage(), -1);
+    	long _pid = pf.getFrameOwnerPID();
+    	int _page = pf.getPage();
+    	mmu.freePageFrame(targetPageFrame);
+		pageTables.get(_pid).set(_page, -1);
     }
 }
