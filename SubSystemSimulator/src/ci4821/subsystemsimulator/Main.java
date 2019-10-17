@@ -32,7 +32,7 @@ public class Main {
         // Inicializacion de los procesos
         for(int i = 0; i < process; i++) {
         	System.out.print("Introduzca el tamaño del proceso " + i + ":");
-        	os.createProcess(100000);
+        	os.createProcess(3);
         }
         in.close();
         

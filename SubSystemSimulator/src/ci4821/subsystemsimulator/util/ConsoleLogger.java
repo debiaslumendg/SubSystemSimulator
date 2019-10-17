@@ -36,24 +36,24 @@ public class ConsoleLogger {
 
     public void logMessage(Level level,String message){
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy\t|\thh:mm:ss a");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy | hh:mm:ss a");
         LocalDateTime now = LocalDateTime.now();
         Thread t = Thread.currentThread();
 
         boolean isOperatingSystemLogging = t.getName().equals("main");
 
         if(level == Level.PAGE_FAULT){
-            // Si es un page fault mentimos diciendo que es el hilo que llamo a este loger fue el main,
+            // Si es un page fault mentimos diciendo que es el hilo que llamo a este logger fue el main,
             // el cual está representado por el SO.
             // Se pudiera hacer pasando el llamante por parametros pero esta es una solución creo mejor y sencilla.
             isOperatingSystemLogging = true;
         }
 
         System.out.format(
-                ">\t%s\t|\t%s\t|\t%s\t|\t%s\t|\tDice \"%s\"\n",
+                "> %s | %s | %s | %s | \"%s\"\n",
                 dtf.format(now),
-                isOperatingSystemLogging? "Sistema Operati":"Proceso: " + t.getName() +"\t",
-                isOperatingSystemLogging? "*\t":"PID: " + t.getId(),
+                isOperatingSystemLogging? "SO":"Proceso: " + t.getName() +" ",
+                isOperatingSystemLogging? "* ":"PID: " + t.getId(),
                 convertLogLevelToString(level),
                 message
         );
@@ -63,13 +63,13 @@ public class ConsoleLogger {
         switch (level){
 
             case INFO:
-                return "Info\t";
+                return "Info ";
             case PAGE_FAULT:
                 return "Page Fault";
             case ERROR:
-                return "Error\t";
+                return "Error ";
             case READ_PAGE:
-                return "Leyendo\t";
+                return "Leyendo ";
             case WRITE_PAGE:
                 return "Escribiendo";
             case NUEVO_PROCESO:
