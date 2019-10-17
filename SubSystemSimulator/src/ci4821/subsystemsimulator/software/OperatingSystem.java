@@ -64,17 +64,35 @@ public class OperatingSystem {
      * @param p
      */
     public synchronized void referencePage(int processPage, SymProcess p) {
-    	Integer pageFrameAddress = pageTables.get(p.getPID()).get(processPage);
+        List<Integer> pageTable = pageTables.get(p.getPID());
+    	Integer pageFrameAddress = pageTable.get(processPage);
+
+        logger.logMessage(ConsoleLogger.Level.INFO,
+                "- Cambiada página virtual " + processPage + " a frame " + pageFrameAddress
+        );
+
     	if (pageFrameAddress >= 0) {
     		mmu.getPageFrame(pageFrameAddress).reference();
     	} else {
+            int targetPageFrame;
     		if (mmu.hasFreeFrames()) {
-    			mmu.assignPageFrame(mmu.getLastFrame(), processPage, p);
+                targetPageFrame = mmu.getLastFreeFrame();
+                logger.logMessage(ConsoleLogger.Level.INFO,
+                        "- Asignado frame " + targetPageFrame + " a la página virtual " + processPage
+                );
     		} else {
-    			int targetPageFrame = pra.getReplacementPageFrame();
+                targetPageFrame = pra.getReplacementPageFrame();
+                logger.logMessage(ConsoleLogger.Level.INFO,
+                        "- A reemplazar frame " + targetPageFrame + " para la página virtual " + processPage
+                );
     			evictProcessPage(targetPageFrame);
-    			mmu.assignPageFrame(targetPageFrame, processPage, p);
     		}
+
+            mmu.assignPageFrame(targetPageFrame, processPage, p);
+            pageTable.set(processPage,targetPageFrame);
+
+            mmu.getPageFrame(targetPageFrame).reference();
+
     	}
     }
     

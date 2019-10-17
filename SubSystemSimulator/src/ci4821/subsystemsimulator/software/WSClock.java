@@ -59,7 +59,7 @@ public class WSClock implements PageReplacementAlgorithm {
 				}
 			}
 			
-			currentPageFrame = (currentPageFrame + 1) % mmu.getLastFrame();
+			currentPageFrame = (currentPageFrame + 1) % mmu.getLastFreeFrame();
 			
 			if (currentPageFrame == cycleStart) {					// Se completó el ciclo y se envían las páginas agendadas al disco
 				cycleComplete = true;
