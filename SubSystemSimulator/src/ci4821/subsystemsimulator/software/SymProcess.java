@@ -31,8 +31,9 @@ public class SymProcess implements Runnable {
     public void run() {
     	
 		for(Integer page : references) {
+			logger.logMessage(ConsoleLogger.Level.MEM_PAGE, "Página " + page + " del proceso " + pid +
+				" pide memoria.");
 			so.referencePage(page,this);
-			logger.logMessage(ConsoleLogger.Level.INFO, "Referenciando página " + page + " en el proceso " + pid);
 		}
 
     }

@@ -42,7 +42,7 @@ public class WSClock implements PageReplacementAlgorithm {
 				
 				if (pf.getRBit()) pf.setRBit(false);				// Se marca la página como no referenciada
 				else if (pf.getMBit()) ScheduleWriteToDisk(pf);		// Se agenda una escritura al disco
-				else if (this.isDue(pf)) return currentPageFrame;	// Si la página superó su tiempo se vida es seleccionada
+				else if (this.isDue(pf)) return currentPageFrame;	// Si la página superó su tiempo de vida es seleccionada
 				
 				if (cleanPageFrame < 0 && !pf.getMBit()) cleanPageFrame = currentPageFrame;
 				
@@ -59,9 +59,9 @@ public class WSClock implements PageReplacementAlgorithm {
 				}
 			}
 			
-			currentPageFrame = (currentPageFrame + 1) % mmu.getLastFrame();
+			currentPageFrame = (currentPageFrame + 1) % mmu.getLastFreeFrame();
 			
-			if (currentPageFrame == cycleStart) {					// Se completó el ciclo y se envían las páginas agendadas al disco
+			if (currentPageFrame == cycleStart) {		// Se completó el ciclo y se envían las páginas agendadas al disco
 				cycleComplete = true;
 				wroteToDisk = WriteQueueToDisk();
 			}
@@ -69,11 +69,11 @@ public class WSClock implements PageReplacementAlgorithm {
 	}
 	
 	private void ScheduleWriteToDisk(PageFrame pf) {
-		diskQueue.add(pf);
+		if(!diskQueue.contains(pf)) diskQueue.add(pf);
 	}
 	
 	private void WritePageToDisk(PageFrame pf) {
-		logger.logMessage(ConsoleLogger.Level.INFO, "Escribiendo página " + 
+		logger.logMessage(ConsoleLogger.Level.WRITE_DISK, "Escribiendo página " + 
 			pf.getPage() + " del proceso " + pf.getFrameOwnerPID() + " al disco");
 		pf.setMBit(false);
 	}

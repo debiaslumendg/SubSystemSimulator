@@ -18,8 +18,9 @@ public class ConsoleLogger {
         INFO,
         PAGE_FAULT,
         ERROR,
-        READ_PAGE,
-        WRITE_PAGE,
+        MEM_PAGE,
+        ASIG_PAGE,
+        WRITE_DISK,
         NUEVO_PROCESO,
         PROCESO_INICIADO
     }
@@ -63,15 +64,17 @@ public class ConsoleLogger {
         switch (level){
 
             case INFO:
-                return "Info ";
+                return "Info";
             case PAGE_FAULT:
                 return "Page Fault";
             case ERROR:
-                return "Error ";
-            case READ_PAGE:
-                return "Leyendo ";
-            case WRITE_PAGE:
-                return "Escribiendo";
+                return "Error";
+            case MEM_PAGE:
+                return "Pagina pide memoria";
+            case ASIG_PAGE:
+                return "Asignando memoria";
+            case WRITE_DISK:
+                return "Actualizar datos";
             case NUEVO_PROCESO:
                 return "Nuevo Proc";
             case PROCESO_INICIADO:

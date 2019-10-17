@@ -12,7 +12,7 @@ import java.util.List;
 public class MemoryManagerUnit {
 
     private List<PageFrame> mainMemory; // Representacion de los frames de la memoria principal.
-    private int lastFrame = 0; // Ultimo frame asignado en la memoria
+    private int lastFreeFrame = 0; // Ultimo frame asignado en la memoria
 
     public MemoryManagerUnit(int totalFrames) {
         this.mainMemory = new ArrayList<>(Collections.nCopies(totalFrames, new PageFrame()));
@@ -20,7 +20,7 @@ public class MemoryManagerUnit {
 
     public void assignPageFrame(int pageFrame, int processPage, SymProcess p) {
     	mainMemory.get(pageFrame).assign(p.getPID(), processPage);
-    	if (pageFrame == lastFrame) lastFrame++;
+    	if (pageFrame == lastFreeFrame) lastFreeFrame++;
     }
     
     public void freePageFrame(int pageFrame) {
@@ -28,14 +28,14 @@ public class MemoryManagerUnit {
     }
     
     public boolean hasFreeFrames() {
-    	return lastFrame != mainMemory.size();
+    	return lastFreeFrame != mainMemory.size();
     }
     
     public PageFrame getPageFrame(int pageFrame) {
     	return mainMemory.get(pageFrame);
     }
     
-    public int getLastFrame() {
-    	return lastFrame;
+    public int getLastFreeFrame() {
+    	return lastFreeFrame;
     }
 }

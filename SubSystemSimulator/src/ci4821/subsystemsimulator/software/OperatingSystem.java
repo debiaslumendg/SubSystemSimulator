@@ -65,18 +65,41 @@ public class OperatingSystem {
      * @param p
      */
     public synchronized void referencePage(int processPage, SymProcess p) {
-    	Integer pageFrameAddress = pageTables.get(p.getPID()).get(processPage);
-        if (pageFrameAddress >= 0 && 
-            mmu.getPageFrame(pageFrameAddress).getFrameOwnerPID() == Thread.currentThread().getId()) {
+        List<Integer> pageTable = pageTables.get(p.getPID());
+    	Integer pageFrameAddress = pageTable.get(processPage);
+
+        
+        if (pageFrameAddress >= 0 &&
+        mmu.getPageFrame(pageFrameAddress).getFrameOwnerPID() == Thread.currentThread().getId()) {
+            logger.logMessage(ConsoleLogger.Level.ASIG_PAGE,
+                "- Actualizada página " + processPage + " a frame " + pageFrameAddress +
+                " del proceso " + p.getPID()
+            );
     		mmu.getPageFrame(pageFrameAddress).reference();
     	} else {
+            int targetPageFrame;
     		if (mmu.hasFreeFrames()) {
-    			mmu.assignPageFrame(mmu.getLastFrame(), processPage, p);
+                targetPageFrame = mmu.getLastFreeFrame();
+                logger.logMessage(ConsoleLogger.Level.ASIG_PAGE,
+                    "- Asignado frame " + targetPageFrame + " a la página " + processPage +
+                    " del proceso " + p.getPID()
+                );
     		} else {
-    			int targetPageFrame = pra.getReplacementPageFrame();
+                targetPageFrame = pra.getReplacementPageFrame();
+                logger.logMessage(ConsoleLogger.Level.PAGE_FAULT,
+                    "- Nuevo frame " + targetPageFrame + " para la página " + processPage +
+                    " del proceso " + p.getPID()
+                );
     			evictProcessPage(targetPageFrame);
-    			mmu.assignPageFrame(targetPageFrame, processPage, p);
     		}
+
+            logger.logMessage(ConsoleLogger.Level.MEM_PAGE,
+                "- Actualizada página " + processPage + " a frame " + targetPageFrame +
+                " del proceso " + p.getPID()
+            );
+            mmu.assignPageFrame(targetPageFrame, processPage, p);
+            pageTable.set(processPage,targetPageFrame);
+            mmu.getPageFrame(targetPageFrame).reference();
     	}
     }
         
