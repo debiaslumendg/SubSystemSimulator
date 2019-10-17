@@ -53,7 +53,7 @@ public class OperatingSystem {
         for(Long pid : processes.keySet()) {
         	processes.get(pid).start();
         	logger.logMessage(ConsoleLogger.Level.PROCESO_INICIADO,
-                    String.format("Iniciado proceso PID: %d", pid));
+                    String.format("Iniciado proceso: %d", pid));
         }
     }
 

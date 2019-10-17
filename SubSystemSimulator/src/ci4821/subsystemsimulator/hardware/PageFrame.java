@@ -63,8 +63,4 @@ public class PageFrame {
 	public void setMBit(boolean mBit) {
 		this.mBit = mBit;
 	}
-
-	
-
-	
 }
