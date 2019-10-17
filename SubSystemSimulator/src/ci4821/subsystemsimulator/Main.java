@@ -7,9 +7,9 @@
  */
 package ci4821.subsystemsimulator;
 
-import ci4821.subsystemsimulator.software.OperatingSystem;
-
 import java.util.Scanner;
+
+import ci4821.subsystemsimulator.software.OperatingSystem;
 
 public class Main {
 
@@ -32,7 +32,7 @@ public class Main {
         // Inicializacion de los procesos
         for(int i = 0; i < process; i++) {
         	System.out.print("Introduzca el tamaño del proceso " + i + ":");
-        	os.createProcess(3);
+        	os.createProcess(in.nextInt());
         }
         in.close();
         

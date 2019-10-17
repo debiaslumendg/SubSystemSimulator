@@ -22,8 +22,9 @@ Para realizar distintas simulaciones se plantea que el simulador pueda manejar
 distintas cantidades de procesos con diferentes cantidades de memoria.
 
 Parámetros de entrada:
-+ Tamaño de la memoria principal: Variable, suministrado por el usuario, en KB.
-+ Cantidad de procesos a simular: Variable, suministrado por el usuario, en KB.
++ Tamaño de la memoria principal: Variable, suministrado por el usuario, en 
+cantidad de frames.
++ Cantidad de procesos a simular: Variable, suministrado por el usuario.
 + Tamaño de página: 4KB.
 
 ---

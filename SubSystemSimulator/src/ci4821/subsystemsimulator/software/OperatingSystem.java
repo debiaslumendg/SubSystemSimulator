@@ -8,16 +8,16 @@
  */
 package ci4821.subsystemsimulator.software;
 
-import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
-import ci4821.subsystemsimulator.hardware.PageFrame;
-import ci4821.subsystemsimulator.util.ConsoleLogger;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
+import ci4821.subsystemsimulator.hardware.PageFrame;
+import ci4821.subsystemsimulator.util.ConsoleLogger;
 
 public class OperatingSystem {
 
@@ -26,7 +26,6 @@ public class OperatingSystem {
     private Map<Long, Thread> processes;
     private Map<Long, List<Integer>> pageTables;
     private PageReplacementAlgorithm pra;
-    private Long lastPID = 0L;
 
     public OperatingSystem(int memorySize) {
 
@@ -42,8 +41,10 @@ public class OperatingSystem {
     public void createProcess(Integer size) {
 
         SymProcess p = new SymProcess(size, this);
-        processes.put(p.getPID(), new Thread(p));
-        pageTables.put(p.getPID(), new ArrayList<>(Collections.nCopies(size, -1)));
+        Thread pThread = new Thread(p);
+        p.setPID(pThread.getId());
+        processes.put(pThread.getId(), pThread);
+        pageTables.put(pThread.getId(), new ArrayList<>(Collections.nCopies(size, -1)));
         
         logger.logMessage(ConsoleLogger.Level.NUEVO_PROCESO,
                 String.format("Creado nuevo proceso PID: %d", p.getPID()));
@@ -65,7 +66,8 @@ public class OperatingSystem {
      */
     public synchronized void referencePage(int processPage, SymProcess p) {
     	Integer pageFrameAddress = pageTables.get(p.getPID()).get(processPage);
-    	if (pageFrameAddress >= 0) {
+        if (pageFrameAddress >= 0 && 
+            mmu.getPageFrame(pageFrameAddress).getFrameOwnerPID() == Thread.currentThread().getId()) {
     		mmu.getPageFrame(pageFrameAddress).reference();
     	} else {
     		if (mmu.hasFreeFrames()) {
@@ -77,11 +79,7 @@ public class OperatingSystem {
     		}
     	}
     }
-    
-    public Long getNewPID() {
-    	return lastPID++;
-    }
-    
+        
     public Collection<Thread> getProcesses() {
     	return processes.values();
     }
