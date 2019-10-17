@@ -70,7 +70,7 @@ public class ConsoleLogger {
             case ERROR:
                 return "Error";
             case MEM_PAGE:
-                return "Pagina pide memoria";
+                return "Proceso pide memoria";
             case ASIG_PAGE:
                 return "Asignando memoria";
             case WRITE_DISK:
