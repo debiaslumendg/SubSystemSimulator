@@ -31,7 +31,7 @@ public class Main {
 
         // Inicializacion de los procesos
         for(int i = 0; i < process; i++) {
-        	System.out.print("Introduzca el tamaño del proceso " + i + ":  ");
+        	System.out.print("Introduzca el tamaño del proceso " + i + "(en páginas):  ");
         	os.createProcess(in.nextInt());
         }
         in.close();
