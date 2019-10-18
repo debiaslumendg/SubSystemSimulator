@@ -21,7 +21,7 @@ public class Main {
 
         Scanner in = new Scanner(System.in); 
         
-        System.out.print("Tamaño de la memoria principal a simular(en frames): ");
+        System.out.print("\033[1;37mTamaño de la memoria principal a simular(en frames): ");
         int memorySize = in.nextInt();
         
         System.out.print("Cantidad de procesos a simular: ");
@@ -31,7 +31,7 @@ public class Main {
 
         // Inicializacion de los procesos
         for(int i = 0; i < process; i++) {
-        	System.out.print("Tamaño del proceso (en páginas)" + i + ": ");
+        	System.out.print("Tamaño del proceso " + i + " (en páginas): ");
         	os.createProcess(in.nextInt());
         }
         in.close();

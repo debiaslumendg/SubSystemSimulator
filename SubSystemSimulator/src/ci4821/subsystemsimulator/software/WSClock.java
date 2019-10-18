@@ -27,7 +27,7 @@ public class WSClock implements PageReplacementAlgorithm {
 	@Override
 	public int getReplacementPageFrame() {
 		
-		logger.logMessage(ConsoleLogger.Level.PAGE_FAULT, "WSClock ejecutándose");
+		logger.logMessage(ConsoleLogger.Level.PAGE_FAULT, "- Reemplazo ejecutándose");
 		
 		int cycleStart = currentPageFrame;
 		boolean cycleComplete = false;
@@ -73,7 +73,7 @@ public class WSClock implements PageReplacementAlgorithm {
 	}
 	
 	private void WritePageToDisk(PageFrame pf) {
-		logger.logMessage(ConsoleLogger.Level.WRITE_DISK, "Escribiendo página " + 
+		logger.logMessage(ConsoleLogger.Level.WRITE_DISK, "- Escribiendo página " + 
 			pf.getPage() + " del proceso " + pf.getFrameOwnerPID() + " al disco");
 		pf.setMBit(false);
 	}

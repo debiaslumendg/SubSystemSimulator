@@ -69,8 +69,7 @@ public class OperatingSystem {
     	Integer pageFrameAddress = pageTable.get(processPage);
 
         
-        if (pageFrameAddress >= 0 &&
-        mmu.getPageFrame(pageFrameAddress).getFrameOwnerPID() == Thread.currentThread().getId()) {
+        if (pageFrameAddress >= 0) {
             logger.logMessage(ConsoleLogger.Level.ASIG_PAGE,
                 "- Actualizada página " + processPage + " a frame " + pageFrameAddress +
                 " del proceso " + p.getPID()
