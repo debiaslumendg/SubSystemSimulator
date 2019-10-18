@@ -53,7 +53,7 @@ public class ConsoleLogger {
         System.out.format(
                 "\033[1;32m>\033[1;37m %s | %s | %s | %s | \"%s\"\n",
                 dtf.format(now),
-                isOperatingSystemLogging? "\033[1;36mSistema Operación\033[1;37m":"\033[1;32mProceso: " + t.getName() + "\033[1;37m",
+                isOperatingSystemLogging? "\033[1;36mSistema Operación\033[1;37m":"\033[1;33mProceso: " + t.getName() + "\033[1;37m",
                 isOperatingSystemLogging? "   *   ":"PID: " + t.getId(),
                 convertLogLevelToString(level),
                 message
@@ -64,7 +64,7 @@ public class ConsoleLogger {
         switch (level){
 
             case INFO:
-                return "\033[1;32mInfo\033[1;37m";
+                return "\033[1;32m \tInformación\t \033[1;37m";
             case PAGE_FAULT:
                 return "\033[1;31m \tPage Fault\t \033[1;37m";
             case ERROR:
@@ -76,9 +76,9 @@ public class ConsoleLogger {
             case WRITE_DISK:
                 return "\033[1;34m   Actualizar datos   \033[1;37m";
             case NUEVO_PROCESO:
-                return "\033[1;36mNuevo Proc\033[1;37m";
+                return "\033[1;36m \tNuevo Proceso\t \033[1;37m";
             case PROCESO_INICIADO:
-                return "\033[1;36mProc Inic\033[1;37m";
+                return "\033[1;36m   Proceso Iniciado   \033[1;37m";
             default:
                 throw new IllegalStateException("Unexpected value: " + level);
         }

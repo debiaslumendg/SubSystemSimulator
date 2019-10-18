@@ -71,7 +71,7 @@ public class OperatingSystem {
         
         if (pageFrameAddress >= 0) {
             logger.logMessage(ConsoleLogger.Level.ASIG_PAGE,
-                "- Actualizada página " + processPage + " a frame " + pageFrameAddress +
+                "- Actualizada página " + processPage + " al frame " + pageFrameAddress +
                 " del proceso " + p.getPID()
             );
     		mmu.getPageFrame(pageFrameAddress).reference();
@@ -93,7 +93,7 @@ public class OperatingSystem {
     		}
 
             logger.logMessage(ConsoleLogger.Level.MEM_PAGE,
-                "- Actualizada página " + processPage + " a frame " + targetPageFrame +
+                "- Actualizada página " + processPage + " al frame " + targetPageFrame +
                 " del proceso " + p.getPID()
             );
             mmu.assignPageFrame(targetPageFrame, processPage, p);

@@ -27,7 +27,7 @@ public class WSClock implements PageReplacementAlgorithm {
 	@Override
 	public int getReplacementPageFrame() {
 		
-		logger.logMessage(ConsoleLogger.Level.PAGE_FAULT, "- Reemplazo ejecutándose");
+		logger.logMessage(ConsoleLogger.Level.INFO, "Reemplazo ejecutándose");
 		
 		int cycleStart = currentPageFrame;
 		boolean cycleComplete = false;
