@@ -46,26 +46,17 @@ Diseño de la interfaz
 El sistema operativo se implementa como la clase principal que se encarga de la mayoria de las acciones del simulador.
 
 Implementa un método sincronizado para compartir el acceso a memoria.
-
-**OperatingSystem: Monitor**
-<br/>
-1)Crear/Iniciar/terminar procesos.
-<br/>
-2) Manejar referencias a memoria de los procesos. (**Método sincronizado**)
-<br/>
-2.1) Convertir refencia número de página a número de frame accesado.
-<br/>
-2.2) Referenciar a los frames.
-<br/>
-2.3) Asignar frames libres a los procesos.
-<br/>
-2.4) Ejecutar el algoritmo de reemplazo.
-<br/>
-2.5) Actualiza la tabla de página de los procesos.
-<br/>
-3) Generar Logs en consola en su ejecución.
-<br/>
-4) Guardar estadisticas en las referencias a memoria.
+	
+#### **OperatingSystem: Monitor**
+1. Crear/Iniciar/terminar procesos.
+2.  Manejar referencias a memoria de los procesos. (**Método sincronizado**)
+    * Convertir refencia número de página a número de frame accesado.
+    * Referenciar a los frames.
+    * Asignar frames libres a los procesos.
+    * Ejecutar el algoritmo de reemplazo.
+    * Actualiza la tabla de página de los procesos.
+3. Generar Logs en consola en su ejecución.
+4. Guardar estadisticas en las referencias a memoria.
 
 ### Arquitectura de la memoria principal. Clases *MemoryManagerUnit* y *PageFrame*
 
