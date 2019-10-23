@@ -47,9 +47,9 @@ El sistema operativo se implementa como la clase principal que se encarga de la 
 
 Implementa un método sincronizado para compartir el acceso a memoria.
 
-OperatingSystem: Monitor
+**OperatingSystem: Monitor**
 <br/>
-1) Crear/Iniciar/terminar procesos.
+1)Crear/Iniciar/terminar procesos.
 <br/>
 2) Manejar referencias a memoria de los procesos. (**Método sincronizado**)
 <br/>
@@ -64,6 +64,7 @@ OperatingSystem: Monitor
 2.5) Actualiza la tabla de página de los procesos.
 <br/>
 3) Generar Logs en consola en su ejecución.
+<br/>
 4) Guardar estadisticas en las referencias a memoria.
 
 ### Arquitectura de la memoria principal. Clases *MemoryManagerUnit* y *PageFrame*
@@ -71,14 +72,14 @@ OperatingSystem: Monitor
 
 La memoria principal será representada como una lista de frames `List<PageFrame>` administrada por una clase  `MemoryManagerUnit`.
 
-MemoryManagerUnit: Administrador simple de memoria
+**MemoryManagerUnit:** Administrador simple de memoria
 + **mainMemory**. Lista de PageFrame
 + **lastFreeFrame**. Ultimo frame en **mainMemory** que está libre, disponible para asignaciones.
 + Asigna o libera un frame.
 + Indica si hay frames libres.
 
 
-PageFrame: Representa un frame de memoria.
+**PageFrame:** Representa un frame de memoria.
 + **frameOwnerPID**. PID del proceso/hilo que tiene asignado el frame.
 + **page**. Número de página asignado al frame.
 + **rBit**. Booleano que indica si este frame ha sido referenciado.
@@ -140,10 +141,10 @@ Al completar un ciclo:
 * Se guarda en disco los frames en la cola y se ponen como no modificados.
 * Si se tiene guardada una referencia a un frame limpio (sin referenciar y sin modificar) se regresa y se sale del algoritmo.
 
-**Campos:**
-**diskQueue**. Cola con páginas que se escribirán al disco cuando se complete el ciclo de reloj.
-**currentPageFrame**. Indica el frame actual, en el recorrido del reloj.
-**ageThreshold**. Tiempo máximo que puede estar una frame ocupado.
-**Metodos:**
-Obtiene el frame a reemplazar.
-Escribe al disco un frame.
+1) **Campos:**
+2) **diskQueue**. Cola con páginas que se escribirán al disco cuando se complete el ciclo de reloj.
+3) **currentPageFrame**. Indica el frame actual, en el recorrido del reloj.
+4) **ageThreshold**. Tiempo máximo que puede estar una frame ocupado.
+5) **Metodos:**
+1) Obtiene el frame a reemplazar.
+2) Escribe al disco un frame.
