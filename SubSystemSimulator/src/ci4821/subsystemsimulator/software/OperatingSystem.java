@@ -116,6 +116,7 @@ public class OperatingSystem {
     private void evictProcessPage(int targetPageFrame) {
     	PageFrame pf = mmu.getPageFrame(targetPageFrame);
     	long _pid = pf.getFrameOwnerPID();
+        statsHandler.incrementStat(_pid,LogStats.StatType.WSCLOCK_TARGET);
     	int _page = pf.getPage();
     	mmu.freePageFrame(targetPageFrame);
 		pageTables.get(_pid).set(_page, -1);
