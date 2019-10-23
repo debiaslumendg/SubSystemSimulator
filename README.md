@@ -141,10 +141,10 @@ Al completar un ciclo:
 * Se guarda en disco los frames en la cola y se ponen como no modificados.
 * Si se tiene guardada una referencia a un frame limpio (sin referenciar y sin modificar) se regresa y se sale del algoritmo.
 
-1) **Campos:**
-2) **diskQueue**. Cola con páginas que se escribirán al disco cuando se complete el ciclo de reloj.
-3) **currentPageFrame**. Indica el frame actual, en el recorrido del reloj.
-4) **ageThreshold**. Tiempo máximo que puede estar una frame ocupado.
-5) **Metodos:**
+##### **Campos:**
+1) **diskQueue**. Cola con páginas que se escribirán al disco cuando se complete el ciclo de reloj.
+2) **currentPageFrame**. Indica el frame actual, en el recorrido del reloj.
+3) **ageThreshold**. Tiempo máximo que puede estar una frame ocupado.
+##### **Metodos:**
 1) Obtiene el frame a reemplazar.
 2) Escribe al disco un frame.
