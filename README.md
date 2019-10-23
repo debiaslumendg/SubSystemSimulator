@@ -48,7 +48,9 @@ El sistema operativo se implementa como la clase principal que se encarga de la 
 Implementa un método sincronizado para compartir el acceso a memoria.
 
 OperatingSystem: Monitor
+<br/>
 1) Crear/Iniciar/terminar procesos.
+<br/>
 2) Manejar referencias a memoria de los procesos. (**Método sincronizado**)
 <br/>
 2.1) Convertir refencia número de página a número de frame accesado.
