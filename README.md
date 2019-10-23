@@ -50,11 +50,17 @@ Implementa un método sincronizado para compartir el acceso a memoria.
 OperatingSystem: Monitor
 1) Crear/Iniciar/terminar procesos.
 2) Manejar referencias a memoria de los procesos. (**Método sincronizado**)
+<br/>
 2.1) Convertir refencia número de página a número de frame accesado.
+<br/>
 2.2) Referenciar a los frames.
+<br/>
 2.3) Asignar frames libres a los procesos.
+<br/>
 2.4) Ejecutar el algoritmo de reemplazo.
+<br/>
 2.5) Actualiza la tabla de página de los procesos.
+<br/>
 3) Generar Logs en consola en su ejecución.
 4) Guardar estadisticas en las referencias a memoria.
 
@@ -111,10 +117,31 @@ Parámetros:
 ---
 
 ### Algoritmo de reemplazo. Reloj. Clases *PageReplacementAlgorithm* , *WSClock* 
-Reemplaza la página con el bit de referencia en cero y primero las no modificadas antes que las modificadas. Para simular los page faults que puedan ocurrir con el algoritmo se vaciará toda la memoria principal o se matará uno o más procesos cada cierto tiempo, también ocurren si hay muchos procesos pidiendo memoria.
 
-Parámetros:
-+ **p**. Proceso al que se le actualizará la tabla de página
-+ **processPage**. Página que reemplazará a otra en la memoria.
+Se encarga de obtener el frame a reemplazar cuando no hay un frame disponible.
+
+**PageReplacementAlgorithm:** Interfaz abstracta a implementar por los algoritmos de reemplazo.
++ **getReplacementPageFrame**. Método abstracto que regresa el frame a reemplazar.
 
 
+**WSClock:** Implementación del algoritmo de reloj mejorado
+
+El algoritmo itera la lista de frames en memoria, cuando llega al último completa un ciclo.
+
+En el transcurso del ciclo: 
+* Si encuentra un frame muy viejo lo escoge para reemplazar y sale del algoritmo.
+* Establece un frame que esté referenciado como no referenciado.
+* Guarda una referencia al primer frame que no esté modificado y lo regresa al completar el ciclo actual.
+* Si el frame está modificado y no referenciado lo coloca en la cola para guardar en disco  al finalizar el ciclo.
+
+Al completar un ciclo:
+* Se guarda en disco los frames en la cola y se ponen como no modificados.
+* Si se tiene guardada una referencia a un frame limpio (sin referenciar y sin modificar) se regresa y se sale del algoritmo.
+
+**Campos:**
+**diskQueue**. Cola con páginas que se escribirán al disco cuando se complete el ciclo de reloj.
+**currentPageFrame**. Indica el frame actual, en el recorrido del reloj.
+**ageThreshold**. Tiempo máximo que puede estar una frame ocupado.
+**Metodos:**
+Obtiene el frame a reemplazar.
+Escribe al disco un frame.
