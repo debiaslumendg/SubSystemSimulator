@@ -18,11 +18,15 @@ Se crean e inician los procesos a simular, los datos de inicio se le piden al us
 * Cantidad de procesos a ejecutar.
 * Tamaño de la memoria virtual para cada proceso, el número de páginas virtuales.
 
-Cada **proceso** es representado como un **hilo**, para que los accesos a la memoria sean controlados por un **monitor**, el cual permita un solo proceso con acceso a la **memoria**.
+Cada **proceso** es representado como un **hilo**, para que los accesos a la memoria 
+sean controlados por un **monitor**, el cual permita un sólo proceso con acceso a la **memoria**.
 
-Las tablas con las traducciones **página** **->** **frame** (Las *Page Tables*) son guardadas en la clase del sistema operativo, para cada proceso referenciados por el **PID** del **proceso**. 
+Las tablas con las traducciones **página** **->** **frame** (Las *Page Tables*) 
+son guardadas en la clase del sistema operativo, para cada proceso referenciados 
+por el **PID** del **proceso**. 
 
-Los procesos cuando se crean generan aleatoriamente una cadena de referencia hacia sus páginas del tamaño de su page table.
+Los procesos cuando se crean generan aleatoriamente una cadena de referencia 
+hacia sus páginas del tamaño de su page table.
 
 En la ejecución del proceso se recorre su string de referencia, cada acceso a memoria será a través del sistema operativo, el cual realizará la referencia si existe el frame asociado con la página, la asignación en caso que no exista y haya espacio o el reemplazo utilizando el algoritmo de **Reloj mejorado** si no hay frames disponibles.
 
@@ -43,7 +47,8 @@ Diseño de la interfaz
 
 ### **Simulador. Clase *OperatingSystem***
 
-El sistema operativo se implementa como la clase principal que se encarga de la mayoria de las acciones del simulador.
+El sistema operativo se implementa como la clase principal que se encarga de la 
+mayoria de las acciones del simulador.
 
 Implementa un método sincronizado para compartir el acceso a memoria.
 	
@@ -58,7 +63,7 @@ Implementa un método sincronizado para compartir el acceso a memoria.
 3. Generar Logs en consola en su ejecución.
 4. Guardar estadisticas en las referencias a memoria.
 
-### Arquitectura de la memoria principal. Clases *MemoryManagerUnit* y *PageFrame*
+### **Arquitectura de la memoria principal. Clases *MemoryManagerUnit* y *PageFrame***
 
 
 La memoria principal será representada como una lista de frames `List<PageFrame>` administrada por una clase  `MemoryManagerUnit`.
@@ -82,7 +87,7 @@ La memoria principal será representada como una lista de frames `List<PageFrame
 
 ---
 
-### Estructura de la tabla de página. 
+### **Estructura de la tabla de página.**
 
 La Tabla se guarda para cada proceso como una variable `HashMap` del sistema operativo.
 
@@ -97,7 +102,7 @@ Map:
 
 ---
 
-### Arquitectura de los procesos. Clase *SymProcess*
+### **Arquitectura de los procesos. Clase *SymProcess***
 
 Los procesos se implementan como hilos para compartir el acceso a memoria utilizando monitores, hay un solo método sincronizado para realizar todo lo relacionado con el acceso a memoria.
 
@@ -110,7 +115,7 @@ Parámetros:
 
 ---
 
-### Algoritmo de reemplazo. Reloj. Clases *PageReplacementAlgorithm* , *WSClock* 
+### **Algoritmo de reemplazo. Reloj. Clases *PageReplacementAlgorithm* , *WSClock***
 
 Se encarga de obtener el frame a reemplazar cuando no hay un frame disponible.
 
@@ -136,6 +141,19 @@ Al completar un ciclo:
 1) **diskQueue**. Cola con páginas que se escribirán al disco cuando se complete el ciclo de reloj.
 2) **currentPageFrame**. Indica el frame actual, en el recorrido del reloj.
 3) **ageThreshold**. Tiempo máximo que puede estar una frame ocupado.
-##### **Metodos:**
+##### **Métodos:**
 1) Obtiene el frame a reemplazar.
 2) Escribe al disco un frame.
+
+---
+Sobre la ejecución
+---
+
+### En Windows
+
+---
+
+### En Linux
+Revisar el archivo ***.classpath*** y chequear el campo **classpathentry** la
+terminación en **path**, puede necesitar cambiarse *jdk-12.0.2* por *JavaSE-12*
+o viceversa
