@@ -30,12 +30,12 @@ Al terminar todos los procesos, el sistema muestra una tabla con las estadistica
 
 ```> PID|Accesos a memoria| Page Faults|Reemplazos provocados|Frames reemplazados en memoria|Frames escritos a disco```
     
-```PID :``` Identificador del proceso/Hilo
-```Accesos a memoria:``` Número de veces que el proceso hizo un acceso a la memoria
-```Page Faults:``` Cantidad de accesos a páginas virtuales que realizó el proceso, los cuales no tenian un frame asociado.
-```Reemplazos provocados:``` Cantidad de page faults del proceso que resultaron en una ejecución del algoritmo de reemplazo.
-```Frames reemplazados en memoria:``` Cantidad de frames del proceso que fueron escogidos como target por el algoritmo de reemplazo.
-```Frames escritos a disco:``` Cantidad de frames del proceso que fueron escritos a disco.
+* ```PID :``` Identificador del proceso/Hilo
+* ```Accesos a memoria:``` Número de veces que el proceso hizo un acceso a la memoria
+* ```Page Faults:``` Cantidad de accesos a páginas virtuales que realizó el proceso, los cuales no tenian un frame asociado.
+* ```Reemplazos provocados:``` Cantidad de page faults del proceso que resultaron en una ejecución del algoritmo de reemplazo.
+* ```Frames reemplazados en memoria:``` Cantidad de frames del proceso que fueron escogidos como target por el algoritmo de reemplazo.
+* ```Frames escritos a disco:``` Cantidad de frames del proceso que fueron escritos a disco.
 
 ---
 Diseño de la interfaz
