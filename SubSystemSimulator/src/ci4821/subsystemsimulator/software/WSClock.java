@@ -8,6 +8,7 @@ import java.util.Queue;
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 import ci4821.subsystemsimulator.hardware.PageFrame;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
+import ci4821.subsystemsimulator.util.LogStats;
 
 public class WSClock implements PageReplacementAlgorithm {
 
@@ -17,17 +18,19 @@ public class WSClock implements PageReplacementAlgorithm {
 	private int currentPageFrame = 0;
 	private int maxWrite = 5;
 	private int ageThreshold = 10000;
-	
+	private LogStats statsHandler;
+
 	public WSClock(MemoryManagerUnit mmu) {
 		this.mmu = mmu;
 		this.diskQueue = new ArrayDeque<>();
 		logger = ConsoleLogger.getInstance();
+		statsHandler = LogStats.getInstance();
 	}
 	
 	@Override
 	public int getReplacementPageFrame() {
 		
-		logger.logMessage(ConsoleLogger.Level.PAGE_FAULT, "WSClock ejecutándose");
+		logger.logMessage(ConsoleLogger.Level.INFO, "Reemplazo ejecutándose");
 		
 		int cycleStart = currentPageFrame;
 		boolean cycleComplete = false;
@@ -73,9 +76,10 @@ public class WSClock implements PageReplacementAlgorithm {
 	}
 	
 	private void WritePageToDisk(PageFrame pf) {
-		logger.logMessage(ConsoleLogger.Level.WRITE_DISK, "Escribiendo página " + 
+		logger.logMessage(ConsoleLogger.Level.WRITE_DISK, "- Escribiendo página " + 
 			pf.getPage() + " del proceso " + pf.getFrameOwnerPID() + " al disco");
 		pf.setMBit(false);
+		statsHandler.incrementStat(pf.getFrameOwnerPID(), LogStats.StatType.WRITE_DISK);
 	}
 
 	private boolean WriteQueueToDisk() {

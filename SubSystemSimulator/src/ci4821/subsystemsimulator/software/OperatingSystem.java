@@ -18,6 +18,7 @@ import java.util.Map;
 import ci4821.subsystemsimulator.hardware.MemoryManagerUnit;
 import ci4821.subsystemsimulator.hardware.PageFrame;
 import ci4821.subsystemsimulator.util.ConsoleLogger;
+import ci4821.subsystemsimulator.util.LogStats;
 
 public class OperatingSystem {
 
@@ -26,6 +27,7 @@ public class OperatingSystem {
     private Map<Long, Thread> processes;
     private Map<Long, List<Integer>> pageTables;
     private PageReplacementAlgorithm pra;
+    private LogStats statsHandler;
 
     public OperatingSystem(int memorySize) {
 
@@ -35,6 +37,8 @@ public class OperatingSystem {
         this.pra = new WSClock(mmu);
         logger = ConsoleLogger.getInstance();
         logger.logMessage(ConsoleLogger.Level.INFO, "Creadas estructuras para la emulación");
+
+        statsHandler = LogStats.getInstance();
     }
 
 
@@ -45,7 +49,7 @@ public class OperatingSystem {
         p.setPID(pThread.getId());
         processes.put(pThread.getId(), pThread);
         pageTables.put(pThread.getId(), new ArrayList<>(Collections.nCopies(size, -1)));
-        
+
         logger.logMessage(ConsoleLogger.Level.NUEVO_PROCESO,
                 String.format("Creado nuevo proceso PID: %d", p.getPID()));
     }
@@ -68,15 +72,16 @@ public class OperatingSystem {
         List<Integer> pageTable = pageTables.get(p.getPID());
     	Integer pageFrameAddress = pageTable.get(processPage);
 
-        
-        if (pageFrameAddress >= 0 &&
-        mmu.getPageFrame(pageFrameAddress).getFrameOwnerPID() == Thread.currentThread().getId()) {
+        statsHandler.incrementStat(p.getPID(),LogStats.StatType.REFS_MEM);
+
+        if (pageFrameAddress >= 0) {
             logger.logMessage(ConsoleLogger.Level.ASIG_PAGE,
-                "- Actualizada página " + processPage + " a frame " + pageFrameAddress +
+                "- Actualizada página " + processPage + " al frame " + pageFrameAddress +
                 " del proceso " + p.getPID()
             );
     		mmu.getPageFrame(pageFrameAddress).reference();
     	} else {
+            statsHandler.incrementStat(p.getPID(),LogStats.StatType.PAGE_FAULT);
             int targetPageFrame;
     		if (mmu.hasFreeFrames()) {
                 targetPageFrame = mmu.getLastFreeFrame();
@@ -85,6 +90,7 @@ public class OperatingSystem {
                     " del proceso " + p.getPID()
                 );
     		} else {
+                statsHandler.incrementStat(p.getPID(),LogStats.StatType.WSCLOCK_);
                 targetPageFrame = pra.getReplacementPageFrame();
                 logger.logMessage(ConsoleLogger.Level.PAGE_FAULT,
                     "- Nuevo frame " + targetPageFrame + " para la página " + processPage +
@@ -94,7 +100,7 @@ public class OperatingSystem {
     		}
 
             logger.logMessage(ConsoleLogger.Level.MEM_PAGE,
-                "- Actualizada página " + processPage + " a frame " + targetPageFrame +
+                "- Actualizada página " + processPage + " al frame " + targetPageFrame +
                 " del proceso " + p.getPID()
             );
             mmu.assignPageFrame(targetPageFrame, processPage, p);

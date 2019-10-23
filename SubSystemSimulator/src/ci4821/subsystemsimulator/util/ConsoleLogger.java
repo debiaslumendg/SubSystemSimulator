@@ -51,10 +51,10 @@ public class ConsoleLogger {
         }
 
         System.out.format(
-                "> %s | %s | %s | %s | \"%s\"\n",
+                "\033[1;32m>\033[1;37m %s | %s | %s | %s | \"%s\"\n",
                 dtf.format(now),
-                isOperatingSystemLogging? "SO":"Proceso: " + t.getName() +" ",
-                isOperatingSystemLogging? "* ":"PID: " + t.getId(),
+                isOperatingSystemLogging? "\033[1;36mSistema Operación\033[1;37m":"\033[1;33mProceso: " + t.getName() + "\033[1;37m",
+                isOperatingSystemLogging? "   *   ":"PID: " + t.getId(),
                 convertLogLevelToString(level),
                 message
         );
@@ -64,21 +64,21 @@ public class ConsoleLogger {
         switch (level){
 
             case INFO:
-                return "Info";
+                return "\033[1;32m \tInformación\t \033[1;37m";
             case PAGE_FAULT:
-                return "Page Fault";
+                return "\033[1;31m \tPage Fault\t \033[1;37m";
             case ERROR:
-                return "Error";
+                return "\033[1;31mError\033[1;37m";
             case MEM_PAGE:
-                return "Pagina pide memoria";
+                return "\033[1;35m Proceso pide memoria \033[1;37m";
             case ASIG_PAGE:
-                return "Asignando memoria";
+                return "\033[1;35m   Asignando memoria  \033[1;37m";
             case WRITE_DISK:
-                return "Actualizar datos";
+                return "\033[1;34m   Actualizar datos   \033[1;37m";
             case NUEVO_PROCESO:
-                return "Nuevo Proc";
+                return "\033[1;36m \tNuevo Proceso\t \033[1;37m";
             case PROCESO_INICIADO:
-                return "Proc Inic";
+                return "\033[1;36m   Proceso Iniciado   \033[1;37m";
             default:
                 throw new IllegalStateException("Unexpected value: " + level);
         }

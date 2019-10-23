@@ -10,6 +10,7 @@ package ci4821.subsystemsimulator;
 import java.util.Scanner;
 
 import ci4821.subsystemsimulator.software.OperatingSystem;
+import ci4821.subsystemsimulator.util.LogStats;
 
 public class Main {
 
@@ -21,17 +22,17 @@ public class Main {
 
         Scanner in = new Scanner(System.in); 
         
-        System.out.print("Introduzca el tamaño de la memoria principal a simular(en frames):  ");
+        System.out.print("\033[1;37mTamaño de la memoria principal a simular(en frames): ");
         int memorySize = in.nextInt();
         
-        System.out.print("Introduzca la cantidad de procesos a simular:  ");
+        System.out.print("Cantidad de procesos a simular: ");
         int process = in.nextInt();
         
         OperatingSystem os = new OperatingSystem(memorySize);
 
         // Inicializacion de los procesos
         for(int i = 0; i < process; i++) {
-        	System.out.print("Introduzca el tamaño del proceso " + i + "(en páginas):  ");
+        	System.out.print("Tamaño del proceso " + i + " (en páginas): ");
         	os.createProcess(in.nextInt());
         }
         in.close();
@@ -46,7 +47,10 @@ public class Main {
 				e.printStackTrace();
 			}
         }
-        
+
+        LogStats statsHandler = LogStats.getInstance();
+        statsHandler.showStats();
+
     }
 
 }
